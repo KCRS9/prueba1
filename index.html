@@ -806,17 +806,13 @@ Por favor, explica el tema de fondo de esta pregunta en unos 3-4 párrafos claro
 Responde en español. Sé claro, concreto y usa analogías si ayudan. No más de 300 palabras.`;
 
   try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+    const resp=await fetch('https://tai-proxy.kevinfisic.workers.dev',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:600,
-        messages:[{role:'user',content:prompt}]
-      })
+      body:JSON.stringify({prompt})
     });
     const data=await resp.json();
-    const text=(data.content&&data.content[0]&&data.content[0].text)||'No se pudo obtener la explicación.';
+    const text=data.text||'No se pudo obtener la explicación.';
     const formatted=text.split('\n\n').map(p=>`<p>${p}</p>`).join('');
     const html=`<div class="smbox"><h4>✦ Saber más</h4>${formatted}</div>`;
     saberMasCache[key]=html;
