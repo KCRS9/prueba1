@@ -812,6 +812,7 @@ Responde en español. Sé claro, concreto y usa analogías si ayudan. No más de
       body:JSON.stringify({prompt})
     });
     const data=await resp.json();
+    if(data.error){box.innerHTML=`<div class="smbox"><p style="color:var(--no)">Error: ${data.error}</p></div>`;btn.disabled=false;return;}
     const text=data.text||'No se pudo obtener la explicación.';
     const formatted=text.split('\n\n').map(p=>`<p>${p}</p>`).join('');
     const html=`<div class="smbox"><h4>✦ Saber más</h4>${formatted}</div>`;
