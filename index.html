@@ -778,7 +778,7 @@ function pick(i){
 function nextQ(){currentIndex++;renderQuestion();}
 function skipQ(){currentIndex++;renderQuestion();}
 
-// ── SABER MÁS (Claude Haiku API) ─────────────────────────────────────────────
+// ── SABER MÁS (Gemini API) ───────────────────────────────────────────────────
 async function saberMas(){
   const q=questions[currentIndex];
   const key=q.year+'_'+q.id;
@@ -789,7 +789,7 @@ async function saberMas(){
   if(saberMasCache[key]){box.innerHTML=saberMasCache[key];return;}
 
   btn.disabled=true;
-  box.innerHTML=`<div class="smbox"><div class="sml"><div class="dp"><span></span><span></span><span></span></div>Consultando a Claude...</div></div>`;
+  box.innerHTML=`<div class="smbox"><div class="sml"><div class="dp"><span></span><span></span><span></span></div>Consultando a Gemini...</div></div>`;
 
   const prompt=`Eres un profesor preparando a un estudiante para el examen TAI-LI (Técnicos Auxiliares de Informática de la Administración General del Estado española). El estudiante no tiene formación previa en informática.
 
