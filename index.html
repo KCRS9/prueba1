@@ -136,6 +136,31 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 .fu{animation:fu .3s cubic-bezier(.4,0,.2,1) both}
 .fu1{animation-delay:.05s}.fu2{animation-delay:.1s}.fu3{animation-delay:.15s}.fu4{animation-delay:.2s}
 @media(max-width:480px){.sgrid{grid-template-columns:1fr}.rpct{font-size:50px}}
+.sup-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:10px}
+.sup-card{background:var(--s);border:1px solid var(--nr);border-radius:var(--r);padding:12px;cursor:pointer;text-align:left;transition:var(--tr);width:100%;font-family:var(--f)}
+.sup-card:hover{border-color:var(--a);background:var(--s2)}
+.sup-card-badge{font-family:var(--m);font-size:10px;color:var(--a);margin-bottom:4px}
+.sup-card-name{font-size:12px;font-weight:500;color:var(--t);margin-bottom:2px;line-height:1.3}
+.sup-card-count{font-size:11px;font-family:var(--m);color:var(--t3)}
+.ctx-panel{background:var(--s);border:1px solid rgba(124,106,247,.3);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
+.ctx-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;user-select:none;background:var(--s2)}
+.ctx-title{font-size:11px;font-weight:600;color:var(--a2)}
+.ctx-arrow{font-size:11px;color:var(--t3);transition:transform var(--tr)}
+.ctx-body{padding:12px 14px;font-size:12px;color:var(--t2);line-height:1.6;display:none}
+.ctx-body.open{display:block}
+.ctx-body p{margin:0 0 8px}
+.ctx-body ul{margin:0 0 8px;padding-left:16px}
+.ctx-body li{margin:2px 0}
+.ctx-body strong{color:var(--t)}
+.ctx-body code{font-family:var(--m);background:var(--s3);padding:1px 5px;border-radius:4px;font-size:11px}
+.uml-wrap{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:10px 0}
+.uml-class{border:1px solid rgba(124,106,247,.4);border-radius:8px;overflow:hidden;font-size:10px;font-family:var(--m)}
+.uml-name{background:rgba(124,106,247,.2);padding:5px 8px;color:var(--a2);font-weight:600;text-align:center}
+.uml-attr{padding:2px 8px;color:var(--t2);border-top:1px solid rgba(124,106,247,.15)}
+.uml-rel{font-size:10px;color:var(--t3);margin:4px 0;font-family:var(--m);text-align:center}
+.net-box{border:1px solid rgba(124,106,247,.3);border-radius:6px;padding:6px 10px;background:var(--s3);font-family:var(--m);font-size:11px;color:var(--t2);margin:4px 0}
+.net-box strong{color:var(--a2)}
+@media(max-width:480px){.sup-grid{grid-template-columns:1fr}.uml-wrap{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -564,12 +589,145 @@ const Q2024=[
 // ── COMBINED BANK ──────────────────────────────────────────────────────────────
 const ALL_Q = [...Q2019, ...Q2022, ...Q2024];
 
+// ── CONTEXTOS SUPUESTOS ────────────────────────────────────────────────────────
+const CONTEXTOS = {
+  S1_2019:{
+    titulo:'Supuesto I · 2019 — Gestión de procesos selectivos',
+    html:`<p>En el departamento TIC, al que usted se acaba de incorporar, quiere desarrollar para la Subdirección de Selección un sistema integral de información para la gestión de los procesos selectivos y convocatorias de oposiciones de la Administración General del Estado. El sistema incluirá, entre otras, las siguientes funcionalidades:</p>
+<ul>
+<li>Gestión de solicitudes de inscripción de aspirantes al proceso selectivo.</li>
+<li>Gestión de colaboradores.</li>
+<li>Generación de listados, estadísticas y cuadros de mando.</li>
+<li>Generación de certificados para aspirantes y colaboradores.</li>
+</ul>
+<p>Dada la envergadura del proyecto, y para aprovechar las aplicaciones ya implantadas en la Subdirección y la experiencia profesional del personal, van a convivir diferentes lenguajes de programación, entre otros, Java, C# o Python, así como distintos gestores de Bases de Datos. Como repositorio de código se utiliza Git.</p>
+<p><strong>A continuación se muestra un diagrama simplificado de clases que describe parte del sistema:</strong></p>
+<div class="uml-wrap">
+<div>
+<div class="uml-class"><div class="uml-name">Solicitud</div><div class="uml-attr">+IdSolicitud</div><div class="uml-attr">+IdOpositor</div><div class="uml-attr">+IdProceso</div></div>
+<div class="uml-rel">Presentada por — 1..N (Solicitud) : 1 (Opositor)</div>
+<div class="uml-rel">Pertenece a — 1..N (Solicitud) : 1 (Proceso)</div>
+</div>
+<div>
+<div class="uml-class"><div class="uml-name">Opositor</div><div class="uml-attr">+IdOpositor</div><div class="uml-attr">+NIF</div></div>
+</div>
+<div>
+<div class="uml-class"><div class="uml-name">Proceso</div><div class="uml-attr">+IdProceso</div><div class="uml-attr">+IdFormaAcceso</div></div>
+<div class="uml-rel">Consta — 1 (Proceso) : 1..N (Ejercicio)</div>
+</div>
+<div>
+<div class="uml-class"><div class="uml-name">Ejercicio</div><div class="uml-attr">+IdEjercicio</div><div class="uml-attr">+IdProceso</div><div class="uml-attr">+Duracion</div></div>
+</div>
+</div>
+<p>Salvo que el enunciado diga lo contrario, se asume que aquellas preguntas que contengan un fragmento de código tendrán declaradas correctamente todas las clases, librerías y variables que no aparezcan explícitamente. Del mismo modo si se trata de lenguaje HTML, se da por supuesto que éste será HTML5 y será ejecutado en navegadores que soporten dicha versión. Las sentencias SQL que aparecen se encuentran dentro del estándar ANSI SQL. Como metodología de base el organismo aplica Métrica v3.</p>`
+  },
+  S2_2019:{
+    titulo:'Supuesto II · 2019 — Integración DCM y CHT (teletrabajo COVID-19)',
+    html:`<p>Debido a la pandemia ocasionada por el SARS-CoV-2, más conocido como Coronavirus, las Administraciones Públicas se han visto obligadas a impulsar el teletrabajo y a cambiar su estrategia en el ámbito de las TIC.</p>
+<p>En este sentido ha sido asignado en la integración de dos organismos en su departamento, los cuales no tienen capacidad para asumir las nuevas demandas de servicios y conexiones.</p>
+<p>Uno de los centros es la <strong>Demarcación de Carreteras de Madrid (DCM)</strong> y el otro es la <strong>Confederación Hidrográfica del Tajo (CHT)</strong>.</p>
+<p>La DCM tiene máquinas físicas <strong>RedHat Enterprise Linux (RHEL)</strong>. Su estructura consiste en tres áreas y en cada una de ellas trabajan 20 personas.</p>
+<p>La CHT tiene máquinas físicas <strong>Solaris</strong>. Su estructura consiste en 5 áreas y en cada una de ellas trabajan 50 personas.</p>
+<p>Ambos organismos tienen bastantes máquinas Windows 10, además de equipamiento específico, para el desarrollo de sus actividades, que tendrá que ser trasladado a su CPD.</p>
+<p>Es crucial la salvaguarda de los datos, la pérdida o inconsistencia de los mismos durante el proceso es algo inasumible.</p>
+<p>Salvo que el enunciado de la propia pregunta diga lo contrario, debe suponer que dispone de los permisos adecuados, tanto a nivel de sistema operativo como de conexión de red.</p>`
+  },
+  S1_2022:{
+    titulo:'Supuesto I · 2022 — Sistema de representación ante la Administración (Cl@ve PIN)',
+    html:`<p>Se va a desarrollar un sistema que permitirá a una persona (interesado) otorgar permiso a otra (representante) para que actúe en su nombre ante la Administración en un determinado trámite. El sistema contará con los siguientes módulos:</p>
+<ul>
+<li>Un frontal web (Punto de Acceso General) que recoge todos los trámites de la Administración y donde el interesado puede otorgar la representación.</li>
+<li>Un proceso que tramita las peticiones de representación, envía notificaciones PUSH a los representantes y recaba los consentimientos producidos.</li>
+<li>Un módulo de gestión para el personal funcionario de atención al público.</li>
+</ul>
+<p>Cuando el interesado pulse el botón <em>Otorgar representación</em> en un trámite, el sistema generará un enlace único con caducidad, que será enviado por notificación PUSH al representante.</p>
+<p>En el momento en que el representante acceda al enlace tendrá disponible la acción <em>Obtener PIN</em> y deberá usar la aplicación móvil <strong>Cl@ve PIN</strong> para obtener un PIN válido.</p>
+<p>El funcionario, en el módulo de gestión, podrá comparar el PIN generado para la operación con el que le ofrece el representante, permitiendo el trámite si estos coinciden.</p>
+<p>Un interesado podrá solicitar representación para tantos trámites como considere y cada trámite podrá ser solicitado por un número cualquiera de interesados, pero <strong>una representación solo es válida para un trámite a la vez</strong>. Asimismo, cada representante podrá obtener permisos en cualquier número de trámites.</p>
+<p><strong>Diagrama de clases:</strong></p>
+<div class="uml-wrap">
+<div>
+<div class="uml-class"><div class="uml-name">SolicitudRepresentación</div><div class="uml-attr">+ idSolicitud : string</div><div class="uml-attr">+ idRepresentante : string</div><div class="uml-attr">+ idInteresado : string</div><div class="uml-attr">+ PIN : string = null</div><div class="uml-attr">+ fechaCaducidad : datetime = null</div><div class="uml-attr">+ fechaAceptacion : datetime = null</div><div class="uml-attr">+ idTramite : string</div></div>
+<div class="uml-rel">▼ 1 : 0..1 ▼</div>
+<div class="uml-class"><div class="uml-name">Notificación</div><div class="uml-attr">+ idSolicitud : string</div><div class="uml-attr">+ fechaEnvio : datetime = null</div></div>
+</div>
+<div>
+<div class="uml-class"><div class="uml-name">Trámite</div><div class="uml-attr">+ idTramite : string</div><div class="uml-attr">+ nombre : string</div></div>
+<div class="uml-rel">Relación SR↔T: multiplicidades a determinar (recuadros SR&gt;T y T&gt;SR)</div>
+</div>
+</div>`
+  },
+  S2_2022:{
+    titulo:'Supuesto II · 2022 — Segmentación de red de la Subdirección General de Informática',
+    html:`<p>La Subdirección General de Informática del Organismo en el que recientemente Vd. ha tomado posesión y a través de su departamento de Sistemas, Comunicaciones y Seguridad, ha decidido acometer un cambio de diseño en la infraestructura de la red informática del departamento y Vd. debe colaborar en su implantación.</p>
+<p>Se parte de la situación inicial donde hay una única red con el siguiente direccionamiento IP <strong>10.20.30.0/24</strong> donde residen:</p>
+<ul>
+<li>Los equipos informáticos de los usuarios</li>
+<li>Las aplicaciones informáticas</li>
+<li>Las Bases de Datos Oracle y MySql</li>
+<li>La conexión a Internet del departamento</li>
+</ul>
+<p>Todo reside en la misma red según el modelo que llamaremos <strong>Modelo A</strong>:</p>
+<div class="net-box"><strong>MODELO A</strong> — Red única 10.20.30.0 / 24<br>Internet ← Router ← [misma red] → PCs Usuarios · Aplicaciones · Bases de Datos</div>
+<p>Después de varios estudios se concluye que se debe realizar una segmentación de la red actual en cuatro subredes:</p>
+<ul>
+<li>Primera Subred para los PCs de usuario</li>
+<li>Segunda Subred para las Bases de Datos</li>
+<li>Tercera Subred para las Aplicaciones</li>
+<li>Cuarta Subred para utilizarla como DMZ</li>
+</ul>
+<p>Se instalará una pareja de Firewalls o Cortafuegos formando un clúster donde se implementarán las reglas necesarias para las conectividades y encaminamientos entre Subredes. El modelo al que llamaremos <strong>Modelo B</strong> pasa a ser el siguiente:</p>
+<div class="net-box"><strong>MODELO B</strong> — Red segmentada<br>Internet ← Router ← <strong>Clúster Firewalls</strong><br>↓ Subred DMZ &nbsp;&nbsp; ↓ Subred PCs de Usuario<br>↓ Subred Aplicaciones &nbsp;&nbsp; ↓ Subred Bases de Datos</div>
+<p><strong>Nota aclaratoria:</strong> los PCs de Usuario tienen sistema operativo <strong>Windows 10</strong> y tanto los servidores para Aplicaciones, Base de Datos y DMZ tienen sistema operativo <strong>Linux RedHat RHEL 7.4</strong>.</p>`
+  },
+  S1_2024:{
+    titulo:'Supuesto I · 2024 — Sistema de gestión de becas para personas opositoras',
+    html:`<p>El organismo en el que usted presta servicios es el órgano competente para la concesión de unas becas para personas opositoras y, por tanto, ha surgido la necesidad de desarrollar un sistema de información que cubra todas las fases que se producen en la concesión de las becas.</p>
+<p>A continuación, se expone parte del modelo de datos del sistema, donde los atributos señalados en negrita son claves primarias y los señalados en cursiva, claves foráneas:</p>
+<div class="uml-wrap">
+<div>
+<div class="uml-class"><div class="uml-name">Interesado</div><div class="uml-attr"><strong>IdInteresado</strong> - bigint</div><div class="uml-attr">DocumentoIdentidad - varchar(9)</div><div class="uml-attr">Nombre - varchar(100)</div><div class="uml-attr">Apellido1 - varchar(100)</div><div class="uml-attr">Apellido2 - varchar(100)</div><div class="uml-attr">Email - varchar(100)</div></div>
+</div>
+<div>
+<div class="uml-class"><div class="uml-name">SolicitudBeca</div><div class="uml-attr"><strong>IdSolicitudBeca</strong> - bigint</div><div class="uml-attr"><em>IdInteresado</em> - bigint</div><div class="uml-attr"><em>IdCuerpoBecado</em> - bigint</div><div class="uml-attr">FechaPresentacion - datetime</div><div class="uml-attr"><em>IdEstado</em> - bigint</div><div class="uml-attr">AnoConvocatoria - int</div></div>
+</div>
+<div>
+<div class="uml-class"><div class="uml-name">FicheroAdjunto</div><div class="uml-attr"><strong>IdFicheroAdjunto</strong> - bigint</div><div class="uml-attr"><em>IdSolicitudBeca</em> - bigint</div><div class="uml-attr">Denominacion - varchar(100)</div></div>
+</div>
+<div>
+<div class="uml-class"><div class="uml-name">CuerpoBecado</div><div class="uml-attr"><strong>IdCuerpoBecado</strong> - bigint</div><div class="uml-attr">Codigo - varchar(10)</div><div class="uml-attr">Denominacion - varchar(100)</div></div>
+<div class="uml-class" style="margin-top:8px"><div class="uml-name">Estado</div><div class="uml-attr"><strong>IdEstado</strong> - bigint</div><div class="uml-attr">Codigo - varchar(10)</div><div class="uml-attr">Denominacion - varchar(100)</div></div>
+</div>
+</div>
+<p>El sistema, en su parte <strong>frontend</strong>, permitirá la firma y presentación de solicitudes, subsanaciones y alegaciones por parte de los interesados una vez se autentiquen. También permitirá la descarga de los distintos listados que se publiquen por parte de los empleados públicos del organismo que tramita estas becas.</p>
+<p>Por otra parte, el <strong>backend</strong> dará el servicio necesario al frontend y, además, permitirá a los empleados públicos del organismo, desde una aplicación de gestión, visualizar la información y documentación de las solicitudes, subsanaciones y alegaciones presentadas, así como la publicación de los listados mencionados anteriormente.</p>
+<p>Para el desarrollo del frontend se utilizará un framework de desarrollo web con <strong>JavaScript, HTML5 y CSS3</strong>, mientras que el backend podrá desarrollarse con <strong>.NET o Java</strong>, dependiendo de la experiencia y conocimientos de los desarrolladores del organismo.</p>
+<p>También se ha decidido usar <strong>GitHub</strong> (plataforma de desarrollo colaborativo para alojar proyectos utilizando el sistema de control de versiones Git) para poder compartir el trabajo entre los desarrolladores en la cual se puede almacenar, compartir y trabajar de forma conjunta en el código. De esta forma se permite seguir y administrar los cambios en el código a lo largo del tiempo.</p>
+<p>Adicionalmente, se utilizará un <strong>gestor documental</strong> para la gestión de la documentación aportada en cada uno de los trámites por los interesados, así como los respectivos servicios del <strong>Catálogo de Servicios de Administración Digital</strong> que puedan reutilizarse.</p>`
+  },
+  S2_2024:{
+    titulo:'Supuesto II · 2024 — Infraestructura de red del organismo OEOF',
+    html:`<p>El Ministerio de Educación, Formación Profesional y Deportes tiene una red asignada en el Plan de Direccionamiento de la AGE <strong>10.9.0.0/16</strong> y ha creado un organismo para la enseñanza online de formadores, <strong>OEOF</strong> (en adelante nos referiremos en este supuesto sólo como "organismo"), al que le ha correspondido la <strong>última de las subredes de las 16</strong> en las que se ha dividido la red ministerial.</p>
+<p>El sistema de enseñanza online de formadores se fundamenta en un servidor de formación accesible también desde Internet en la URL <strong>https://www.profesores.es</strong>. Los servidores de este sistema (web, http, DNS, DHCP, LDAP), se van a instalar con sistema operativo <strong>Linux Ubuntu</strong>. El portal web está montado usando <strong>Apache Tomcat</strong>.</p>
+<p>El certificado del portal (SSL) estará asociado al dominio <strong>profesores.es</strong>. Para poder gestionar el correo de los profesores, se ha instalado un servidor de correo con tecnología <strong>Postfix</strong>.</p>
+<p>Los DNS se han instalado usando el software <strong>BIND</strong> así como la asignación dinámica de direcciones IP mediante <strong>DHCP</strong>.</p>
+<p>Hay un servidor llamado <strong>BIBLIOTECA</strong> que contiene un compendio de documentos e información de utilidad para los profesores. El acceso está permitido por <strong>RDP</strong>. En los elementos de configuración está permitido el acceso remoto para todos los usuarios que en el Directorio Activo estén en el <strong>Grupo de Profesores</strong>. El resto no podrán conectarse. No hay elementos de red que impidan la conexión libre por el <strong>puerto RDP 389</strong> a dicho servidor, desde su misma VLAN.</p>
+<p>La base de datos de la biblioteca es <strong>MySQL</strong>.</p>
+<p>Además, sobre servidores Ubuntu, se han instalado herramientas de detección de vulnerabilidades (<strong>Tenable Nessus</strong> y <strong>Nmap</strong>) y de monitorización de sistemas y de aplicaciones web (<strong>Nagios</strong>).</p>
+<p>Los usuarios de la red (profesores) usan <strong>escritorios virtuales</strong>.</p>
+<p>Los switches para configurar las VLANs son <strong>CISCO</strong> (usan sistema operativo <strong>Cisco IOS</strong>).</p>
+<p>El CPD principal del organismo tiene un respaldo en un CPD secundario, pero no está configurado como activo-activo y los cambios de los servicios tienen que pasarse manualmente. Tiene redundancia de componentes y de suministro eléctrico y de red. El CPD es <strong>TIER III</strong>.</p>
+<p>Salvo que se indique lo contrario en el enunciado, se supone que usted posee <strong>permisos de administrador</strong>.</p>`
+  }
+};
+
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let questions=[], currentIndex=0, answered=false, score=0, total=0;
 let wrongIds=[], mode='all', filterYear='all', filterSection='all';
 let savedSession=null, deferredPrompt=null, installDismissed=false;
 let saberMasCache={};
 let currentShuffled=[0,1,2,3];
+let activeContextKey=null;
 
 // ── PERSISTENCE ───────────────────────────────────────────────────────────────
 function save(){
@@ -578,7 +736,7 @@ function save(){
     if(answered===false && currentIndex>0){
       localStorage.setItem('tai_session',JSON.stringify({
         qIds:questions.map(q=>q.id+'_'+q.year),
-        idx:currentIndex,score,total,mode,filterYear,filterSection
+        idx:currentIndex,score,total,mode,filterYear,filterSection,activeContextKey
       }));
     }
   }catch(e){}
@@ -638,6 +796,7 @@ function sectionCount(sec,yr){
 
 // ── RENDER HOME ───────────────────────────────────────────────────────────────
 function renderHome(){
+  activeContextKey=null;
   clearSession();
   const pct=total>0?Math.round(score/total*100):0;
   const tot=sectionCount(filterSection,filterYear);
@@ -673,25 +832,50 @@ function renderHome(){
       <button class="ytab ${filterYear==='2022'?'on':''}" onclick="setYear('2022')">2022</button>
       <button class="ytab ${filterYear==='2024'?'on':''}" onclick="setYear('2024')">2024</button>
     </div>
-    <div class="lbl fu fu2">Sección</div>
-    <div class="sgrid fu fu2">
-      <button class="sbtn ${filterSection==='all'?'on':''}" onclick="setSec('all')">
-        <div class="sbtn-n">Todas las preguntas</div><div class="sbtn-c">${sectionCount('all',filterYear)} preguntas</div></button>
-      <button class="sbtn ${filterSection==='p1'?'on':''}" onclick="setSec('p1')">
-        <div class="sbtn-n">Primera parte</div><div class="sbtn-c">${sectionCount('p1',filterYear)} preguntas</div></button>
-      <button class="sbtn ${filterSection==='s1'?'on':''}" onclick="setSec('s1')">
-        <div class="sbtn-n">Supuesto I</div><div class="sbtn-c">${sectionCount('s1',filterYear)} preguntas</div></button>
-      <button class="sbtn ${filterSection==='s2'?'on':''}" onclick="setSec('s2')">
-        <div class="sbtn-n">Supuesto II</div><div class="sbtn-c">${sectionCount('s2',filterYear)} preguntas</div></button>
+    <div class="lbl fu fu2">Primera parte</div>
+    <div class="sgrid fu fu2" style="grid-template-columns:1fr">
+      <button class="sbtn" onclick="startP1()">
+        <div class="sbtn-n">Primera parte${filterYear!=='all'?' · '+filterYear:''}</div>
+        <div class="sbtn-c">${sectionCount('p1',filterYear)} preguntas</div>
+      </button>
     </div>
-    ${wn>0?`<button class="wbtn fu fu3" onclick="setSec('wrong')"><span class="wbt">Repasar solo falladas</span><span class="wbc">${wn} preguntas</span></button>`:''}
-    <button class="start-btn fu fu4" onclick="startQuiz()">Empezar</button>
+    <div class="lbl fu fu3">Supuestos prácticos</div>
+    <div class="sgrid fu fu3" style="grid-template-columns:1fr">
+      ${(()=>{
+        const todos=[
+          {key:'S1_2019',yr:'2019',sec:'s1',n:'Supuesto I · 2019',d:'Gestión de procesos selectivos'},
+          {key:'S2_2019',yr:'2019',sec:'s2',n:'Supuesto II · 2019',d:'Integración DCM y CHT'},
+          {key:'S1_2022',yr:'2022',sec:'s1',n:'Supuesto I · 2022',d:'Representación con Cl@ve PIN'},
+          {key:'S2_2022',yr:'2022',sec:'s2',n:'Supuesto II · 2022',d:'Segmentación de red'},
+          {key:'S1_2024',yr:'2024',sec:'s1',n:'Supuesto I · 2024',d:'Sistema de gestión de becas'},
+          {key:'S2_2024',yr:'2024',sec:'s2',n:'Supuesto II · 2024',d:'Infraestructura OEOF'}
+        ];
+        const lista=filterYear==='all'?todos:todos.filter(s=>s.yr===filterYear);
+        return lista.map(s=>`<button class="sbtn" onclick="startSupuesto('${s.key}')"><div class="sbtn-n">${s.n}</div><div class="sbtn-c">${sectionCount(s.sec,s.yr)} preguntas · con enunciado</div></button>`).join('');
+      })()}
+    </div>
+    ${wn>0?`<button class="wbtn fu fu4" onclick="startWrong()"><span class="wbt">Repasar solo falladas</span><span class="wbc">${wn} preguntas</span></button>`:''}
   `;
   updateHdr();
 }
 
-function setYear(y){filterYear=y;filterSection='all';renderHome();}
+function setYear(y){filterYear=y;renderHome();}
 function setSec(s){filterSection=s;renderHome();}
+function startP1(){filterSection='p1';activeContextKey=null;startQuiz();}
+function startWrong(){filterSection='wrong';activeContextKey=null;startQuiz();}
+function startSupuesto(key){
+  const map={S1_2019:['s1','2019'],S2_2019:['s2','2019'],S1_2022:['s1','2022'],S2_2022:['s2','2022'],S1_2024:['s1','2024'],S2_2024:['s2','2024']};
+  [filterSection,filterYear]=map[key];
+  activeContextKey=key;
+  startQuiz();
+}
+function toggleCtx(){
+  const body=document.getElementById('ctx-body');
+  const arr=document.getElementById('ctx-arr');
+  if(!body)return;
+  const open=body.classList.toggle('open');
+  arr.textContent=open?'▲':'▼';
+}
 
 // ── START / RESUME ────────────────────────────────────────────────────────────
 function startQuiz(){
@@ -709,6 +893,7 @@ function resumeSession(){
   questions=qs;currentIndex=savedSession.idx;
   score=savedSession.score||0;total=savedSession.idx;
   mode=savedSession.mode||'all';filterYear=savedSession.filterYear||'all';filterSection=savedSession.filterSection||'all';
+  activeContextKey=savedSession.activeContextKey||null;
   savedSession=null;answered=false;
   renderQuestion();
 }
@@ -722,7 +907,8 @@ function renderQuestion(){
   const pct=Math.round((currentIndex/questions.length)*100);
   const lets=['a','b','c','d'];
   currentShuffled=q.anulada?[0,1,2,3]:shuffle([0,1,2,3]);
-  document.getElementById('main').innerHTML=`
+  const ctxHtml=activeContextKey&&CONTEXTOS[activeContextKey]?`<div class="ctx-panel fu"><div class="ctx-hdr" onclick="toggleCtx()"><span class="ctx-title">📋 ${CONTEXTOS[activeContextKey].titulo}</span><span class="ctx-arrow" id="ctx-arr">▼</span></div><div class="ctx-body" id="ctx-body">${CONTEXTOS[activeContextKey].html}</div></div>`:'';
+  document.getElementById('main').innerHTML=`${ctxHtml}
     <div class="qprog fu">
       <div class="pmeta"><span class="pctr">${currentIndex+1} / ${questions.length}</span><span class="psco">${score} correctas</span></div>
       <div class="ptrack"><div class="pfill" style="width:${pct}%"></div></div>
