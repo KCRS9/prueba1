@@ -161,6 +161,13 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 .net-box{border:1px solid rgba(124,106,247,.3);border-radius:6px;padding:6px 10px;background:var(--s3);font-family:var(--m);font-size:11px;color:var(--t2);margin:4px 0}
 .net-box strong{color:var(--a2)}
 @media(max-width:480px){.sup-grid{grid-template-columns:1fr}.uml-wrap{grid-template-columns:1fr}}
+.tem-btn{display:flex;align-items:center;justify-content:space-between;width:100%;padding:13px 16px;background:var(--s);border:1px solid rgba(124,106,247,.3);border-radius:var(--r);text-decoration:none;color:var(--t);cursor:pointer;transition:var(--tr);margin-top:4px}
+.tem-btn:hover{background:var(--s2);border-color:var(--a)}
+.tem-btn-l{display:flex;align-items:center;gap:10px}
+.tem-btn-icon{font-size:18px;line-height:1}
+.tem-btn-n{font-size:13px;font-weight:500;color:var(--t)}
+.tem-btn-s{font-size:11px;font-family:var(--m);color:var(--t3);margin-top:1px}
+.tem-btn-arr{font-size:14px;color:var(--a2)}
 </style>
 </head>
 <body>
@@ -855,6 +862,16 @@ function renderHome(){
       })()}
     </div>
     ${wn>0?`<button class="wbtn fu fu4" onclick="startWrong()"><span class="wbt">Repasar solo falladas</span><span class="wbc">${wn} preguntas</span></button>`:''}
+    <a class="tem-btn fu fu4" href="temario.html">
+      <div class="tem-btn-l">
+        <span class="tem-btn-icon">📖</span>
+        <div>
+          <div class="tem-btn-n">Temario</div>
+          <div class="tem-btn-s">Conceptos clave y novedades del examen</div>
+        </div>
+      </div>
+      <span class="tem-btn-arr">›</span>
+    </a>
   `;
   updateHdr();
 }

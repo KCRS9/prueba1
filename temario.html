@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Temario — TAI-LI Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f0f1a;--s:#1a1a2e;--s2:#22223b;--s3:#2d2d4e;--a:#7c6af7;--a2:#a78bfa;--ag:rgba(124,106,247,.25);--t:#e8e6f0;--t2:#9d9bbf;--t3:#6b69a0;--ok:#10b981;--no:#f43f5e;--w:#f59e0b;--nr:rgba(255,255,255,.08);--r:14px;--f:'Sora',sans-serif;--m:'JetBrains Mono',monospace;--tr:.2s cubic-bezier(.4,0,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t);font-family:var(--f);min-height:100vh;padding-bottom:40px}
+#app{max-width:640px;margin:0 auto;padding:0 16px}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--nr);margin-bottom:24px;position:sticky;top:0;background:var(--bg);z-index:10}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-i{width:34px;height:34px;background:linear-gradient(135deg,var(--a),var(--a2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;letter-spacing:-.03em}
+.logo-t{font-weight:600;font-size:14px}
+.logo-s{font-size:10px;font-family:var(--m);color:var(--t3)}
+.back-btn{background:var(--s);border:1px solid var(--nr);border-radius:var(--r);padding:7px 14px;font-family:var(--f);font-size:12px;color:var(--t2);cursor:pointer;transition:var(--tr);text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.back-btn:hover{background:var(--s2);color:var(--t)}
+.hero{text-align:center;padding:8px 0 28px}
+.hero-badge{font-family:var(--m);font-size:11px;color:var(--a);letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.hero-t{font-size:clamp(22px,5vw,30px);font-weight:600;letter-spacing:-.03em;margin-bottom:8px;background:linear-gradient(135deg,var(--t) 40%,var(--a2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-s{font-size:13px;color:var(--t2);max-width:400px;margin:0 auto}
+.sec-lbl{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin:28px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--nr)}
+.sec-badge{display:inline-block;font-family:var(--m);font-size:10px;padding:3px 10px;border-radius:20px;margin-bottom:16px}
+.badge-a{background:rgba(124,106,247,.15);border:1px solid rgba(124,106,247,.3);color:var(--a2)}
+.badge-b{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:var(--w)}
+.acc-item{background:var(--s);border:1px solid var(--nr);border-radius:var(--r);margin-bottom:8px;overflow:hidden}
+.acc-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;user-select:none;transition:background var(--tr)}
+.acc-hdr:hover{background:var(--s2)}
+.acc-hdr.open{background:var(--s2);border-bottom:1px solid var(--nr)}
+.acc-title{font-size:14px;font-weight:500;color:var(--t)}
+.acc-arrow{font-size:12px;color:var(--t3);transition:transform var(--tr);flex-shrink:0}
+.acc-hdr.open .acc-arrow{transform:rotate(180deg)}
+.acc-body{display:none;padding:16px;font-size:13px;color:var(--t2);line-height:1.75}
+.acc-body.open{display:block}
+.acc-body p{margin-bottom:12px}
+.acc-body p:last-child{margin-bottom:0}
+.acc-body ul,.acc-body ol{margin:8px 0 12px;padding-left:20px}
+.acc-body li{margin-bottom:5px}
+.acc-body strong{color:var(--t)}
+.acc-body em{color:var(--a2);font-style:normal}
+.acc-body code{font-family:var(--m);background:var(--s3);padding:2px 6px;border-radius:4px;font-size:11px;color:var(--a2)}
+.acc-body h4{font-size:12px;font-weight:600;color:var(--a2);margin:14px 0 6px;text-transform:uppercase;letter-spacing:.06em}
+.tip{background:rgba(124,106,247,.08);border-left:3px solid var(--a);border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0;font-size:12px}
+.tip-label{font-size:10px;font-family:var(--m);color:var(--a);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em}
+.warn{background:rgba(245,158,11,.08);border-left:3px solid var(--w);border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0;font-size:12px}
+.warn-label{font-size:10px;font-family:var(--m);color:var(--w);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em}
+table.t{width:100%;border-collapse:collapse;margin:12px 0;font-size:12px}
+table.t th{background:var(--s3);border:1px solid var(--nr);padding:7px 10px;color:var(--a2);text-align:left;font-weight:600}
+table.t td{border:1px solid var(--nr);padding:6px 10px;color:var(--t2)}
+table.t tr:hover td{background:rgba(255,255,255,.02)}
+@keyframes fu{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fu .3s cubic-bezier(.4,0,.2,1) both}
+</style>
+</head>
+<body>
+<div id="app">
+<header class="hdr">
+  <div class="logo">
+    <div class="logo-i">TAI</div>
+    <div><div class="logo-t">TAI-LI Quiz</div><div class="logo-s">Temario de repaso</div></div>
+  </div>
+  <a href="index.html" class="back-btn">← Volver al quiz</a>
+</header>
+
+<div class="hero fu">
+  <div class="hero-badge">Material de estudio</div>
+  <h1 class="hero-t">Temario de repaso</h1>
+  <p class="hero-s">Conceptos clave explicados desde cero, sin tecnicismos innecesarios. Pulsa cualquier tema para expandirlo.</p>
+</div>
+
+<!-- ══════════════════════════════════════════════ APARTADO A -->
+<div class="sec-lbl">Apartado A — Conceptos clave de exámenes anteriores</div>
+<span class="sec-badge badge-a">2019 · 2022 · 2024</span>
+
+<!-- OSI -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">Modelo OSI — Las 7 capas de la red</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p>Imagina que quieres enviar una carta a alguien en otro país. Hay un proceso: escribes la carta, la metes en un sobre, pones la dirección, la llevas a correos, pasa por avión, llega al destino y alguien la entrega. El <strong>Modelo OSI</strong> es exactamente eso, pero para datos en redes de ordenadores. Divide el proceso de comunicación en <strong>7 capas</strong>, cada una con una función concreta.</p>
+<div class="tip"><div class="tip-label">Truco para recordar el orden (de arriba a abajo)</div>«<strong>A</strong>ll <strong>P</strong>eople <strong>S</strong>eem <strong>T</strong>o <strong>N</strong>eed <strong>D</strong>ata <strong>P</strong>rocessing» → Aplicación, Presentación, Sesión, Transporte, Red, Datos, Física</div>
+<table class="t">
+<tr><th>#</th><th>Capa</th><th>Qué hace</th><th>Dispositivos / protocolos</th></tr>
+<tr><td>7</td><td><strong>Aplicación</strong></td><td>Interfaz con el usuario y las apps</td><td>HTTP, FTP, DNS, SMTP</td></tr>
+<tr><td>6</td><td><strong>Presentación</strong></td><td>Traduce, cifra y comprime datos</td><td>SSL/TLS, JPEG, ASCII</td></tr>
+<tr><td>5</td><td><strong>Sesión</strong></td><td>Abre, gestiona y cierra sesiones</td><td>NetBIOS, RPC</td></tr>
+<tr><td>4</td><td><strong>Transporte</strong></td><td>Entrega fiable de extremo a extremo</td><td>TCP, UDP</td></tr>
+<tr><td>3</td><td><strong>Red</strong></td><td>Encaminamiento entre redes (IPs)</td><td>Router, IP, ICMP</td></tr>
+<tr><td>2</td><td><strong>Enlace de datos</strong></td><td>Comunicación entre dispositivos del mismo segmento</td><td>Switch, Ethernet, MAC</td></tr>
+<tr><td>1</td><td><strong>Física</strong></td><td>Transmisión de bits por el medio físico</td><td>Hub, cable, fibra, wifi</td></tr>
+</table>
+<div class="tip"><div class="tip-label">Lo que más preguntan</div>El <strong>Router</strong> trabaja en capa 3 (Red). El <strong>Switch</strong> en capa 2 (Enlace). El <strong>Hub</strong> en capa 1 (Física). SSL/TLS está en capa 6 (Presentación).</div>
+</div>
+</div>
+
+<!-- RAID -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">RAID — Redundancia y rendimiento en discos duros</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p><strong>RAID</strong> (Redundant Array of Independent Disks) es una tecnología que combina varios discos duros para que el sistema los vea como uno solo. El objetivo es mejorar la <strong>velocidad</strong>, la <strong>seguridad</strong> ante fallos, o ambas cosas.</p>
+<table class="t">
+<tr><th>RAID</th><th>Discos mínimos</th><th>Qué hace</th><th>Tolera fallos</th></tr>
+<tr><td><strong>RAID 0</strong></td><td>2</td><td>Divide los datos entre discos (striping). Más velocidad, pero si falla uno, pierdes todo.</td><td>No</td></tr>
+<tr><td><strong>RAID 1</strong></td><td>2</td><td>Copia exacta en cada disco (mirroring). Si falla uno, el otro sigue funcionando.</td><td>Sí (1 disco)</td></tr>
+<tr><td><strong>RAID 5</strong></td><td>3</td><td>Divide datos y añade información de paridad distribuida. Buen equilibrio rendimiento/seguridad.</td><td>Sí (1 disco)</td></tr>
+<tr><td><strong>RAID 6</strong></td><td>4</td><td>Como RAID 5 pero con doble paridad. Más seguro.</td><td>Sí (2 discos)</td></tr>
+<tr><td><strong>RAID 10</strong></td><td>4</td><td>Combinación de RAID 1 + RAID 0. Velocidad y redundancia.</td><td>Sí (depende)</td></tr>
+</table>
+<div class="tip"><div class="tip-label">Analogía</div>RAID 0 es como dividir un libro en dos partes y leerlas a la vez (más rápido, pero si pierdes una parte, no entiendes nada). RAID 1 es como hacer una fotocopia del libro entero.</div>
+</div>
+</div>
+
+<!-- TCP vs UDP -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">TCP vs UDP — Cómo viajan los datos por la red</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p>Cuando envías datos por internet, puedes hacerlo de dos maneras principales: con <strong>TCP</strong> o con <strong>UDP</strong>.</p>
+<table class="t">
+<tr><th></th><th>TCP</th><th>UDP</th></tr>
+<tr><td><strong>Nombre</strong></td><td>Transmission Control Protocol</td><td>User Datagram Protocol</td></tr>
+<tr><td><strong>Conexión</strong></td><td>Orientado a conexión (hay "saludo" previo)</td><td>Sin conexión (envía y ya)</td></tr>
+<tr><td><strong>Fiabilidad</strong></td><td>Garantiza que todos los datos llegan y en orden</td><td>No garantiza entrega ni orden</td></tr>
+<tr><td><strong>Velocidad</strong></td><td>Más lento (hay verificaciones)</td><td>Más rápido</td></tr>
+<tr><td><strong>Uso típico</strong></td><td>Web (HTTP), email, transferencia de archivos</td><td>Videollamadas, streaming, juegos online, DNS</td></tr>
+</table>
+<div class="tip"><div class="tip-label">Analogía</div>TCP es como un servicio de mensajería con acuse de recibo: sabes que el paquete llegó. UDP es como echar una carta por el buzón: la mandas pero no sabes si llegó. Para un videojuego en tiempo real, mejor UDP aunque se pierda algún dato, que esperar confirmaciones.</div>
+</div>
+</div>
+
+<!-- DNS, DHCP, HTTP/HTTPS -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">DNS, DHCP, HTTP/HTTPS — Los protocolos del día a día</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<h4>DNS — Domain Name System</h4>
+<p>Es la <strong>"agenda de teléfonos" de internet</strong>. Traduce nombres como <code>www.google.com</code> a direcciones IP (<code>142.250.184.100</code>) que los ordenadores entienden. Sin DNS tendrías que memorizar IPs numéricas para cada web.</p>
+<h4>DHCP — Dynamic Host Configuration Protocol</h4>
+<p>Cuando conectas tu móvil al wifi, automáticamente recibe una dirección IP, una puerta de enlace y un servidor DNS. Quien hace esa asignación automática es el servidor <strong>DHCP</strong>. Sin él tendrías que configurar la IP a mano en cada dispositivo.</p>
+<h4>HTTP / HTTPS</h4>
+<p><strong>HTTP</strong> (HyperText Transfer Protocol) es el protocolo que usa tu navegador para pedir páginas web al servidor. <strong>HTTPS</strong> es exactamente igual pero con cifrado mediante <strong>TLS</strong>, de modo que nadie en el camino puede leer lo que intercambias. El candado que ves en la barra del navegador indica HTTPS.</p>
+<div class="tip"><div class="tip-label">Puertos que preguntan</div>HTTP → puerto <strong>80</strong> · HTTPS → puerto <strong>443</strong> · DNS → puerto <strong>53</strong> · DHCP → puertos <strong>67/68</strong></div>
+</div>
+</div>
+
+<!-- Criptografía -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">Criptografía básica — Cifrado, hash y firma digital</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<h4>Cifrado simétrico</h4>
+<p>Se usa la <strong>misma clave</strong> para cifrar y descifrar. Es rápido pero tiene un problema: ¿cómo compartes la clave de forma segura? Ejemplos: AES, DES, Triple DES.</p>
+<h4>Cifrado asimétrico</h4>
+<p>Usa un <strong>par de claves</strong>: una <em>clave pública</em> (la puedes dar a cualquiera) y una <em>clave privada</em> (solo la tienes tú). Lo que se cifra con una solo se puede descifrar con la otra. Esto resuelve el problema del intercambio de claves. Ejemplos: RSA, ElGamal.</p>
+<div class="tip"><div class="tip-label">Analogía</div>La clave pública es como un buzón de correos: cualquiera puede meter una carta. La clave privada es la llave para abrir ese buzón: solo la tienes tú.</div>
+<h4>Hash (función de resumen)</h4>
+<p>Es una función matemática que convierte cualquier dato en una cadena de longitud fija. Es <strong>irreversible</strong>: no puedes obtener el original a partir del hash. Se usa para verificar integridad (si cambia un solo byte, el hash es completamente diferente). Ejemplos: MD5, SHA-1, <strong>SHA-256</strong>.</p>
+<h4>Firma digital</h4>
+<p>Combina hash y cifrado asimétrico. El emisor calcula el hash del mensaje y lo cifra con su <strong>clave privada</strong>. El receptor descifra el hash con la <strong>clave pública</strong> del emisor y verifica que coincide. Garantiza autenticidad e integridad.</p>
+</div>
+</div>
+
+<!-- Normalización -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">Normalización de bases de datos — 1FN, 2FN y 3FN</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p>Normalizar una base de datos significa organizarla para <strong>eliminar redundancias</strong> y evitar problemas al insertar, actualizar o borrar datos. Hay formas normales que se aplican en orden.</p>
+<h4>1ª Forma Normal (1FN)</h4>
+<p>Cada celda de la tabla debe contener un <strong>único valor atómico</strong> (indivisible). No se permiten listas ni conjuntos en una celda.</p>
+<p><em>Mal:</em> columna "Teléfonos" con valor "666111222, 666333444". <em>Bien:</em> una fila por teléfono.</p>
+<h4>2ª Forma Normal (2FN)</h4>
+<p>Debe estar en 1FN y además todos los atributos que no son clave deben depender de <strong>la clave completa</strong>, no solo de una parte de ella. Aplica cuando hay claves compuestas.</p>
+<p><em>Ejemplo:</em> si la clave es (IdPedido, IdProducto), el nombre del producto solo depende de IdProducto → hay que sacarlo a otra tabla.</p>
+<h4>3ª Forma Normal (3FN)</h4>
+<p>Debe estar en 2FN y además no debe haber <strong>dependencias transitivas</strong>: un atributo no clave no debe depender de otro atributo no clave.</p>
+<p><em>Ejemplo:</em> si tienes CodPostal → Ciudad en una tabla de clientes, City depende de CodPostal (no de la clave primaria IdCliente) → hay que separarlo.</p>
+</div>
+</div>
+
+<!-- Patrones GoF -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">Patrones de diseño GoF — Los más preguntados</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p>Los <strong>patrones de diseño GoF</strong> (Gang of Four) son soluciones reutilizables a problemas comunes de programación. No son código concreto, son <em>recetas</em>.</p>
+<table class="t">
+<tr><th>Patrón</th><th>Tipo</th><th>Para qué sirve</th><th>Analogía</th></tr>
+<tr><td><strong>Singleton</strong></td><td>Creacional</td><td>Garantiza que solo existe una instancia de una clase</td><td>El presidente de un país: solo puede haber uno a la vez</td></tr>
+<tr><td><strong>Decorator</strong></td><td>Estructural</td><td>Añade funcionalidad a un objeto sin modificar su clase</td><td>Añadir ingredientes a una pizza sin cambiar la receta base</td></tr>
+<tr><td><strong>Adapter</strong></td><td>Estructural</td><td>Permite que clases con interfaces incompatibles trabajen juntas</td><td>Un adaptador de enchufe europeo a americano</td></tr>
+<tr><td><strong>Facade</strong></td><td>Estructural</td><td>Proporciona una interfaz simplificada a un sistema complejo</td><td>El mando a distancia: oculta la complejidad del televisor</td></tr>
+<tr><td><strong>Proxy</strong></td><td>Estructural</td><td>Controla el acceso a otro objeto (puede añadir caché, seguridad, etc.)</td><td>Un abogado que actúa en nombre de su cliente</td></tr>
+<tr><td><strong>Iterator</strong></td><td>Comportamiento</td><td>Recorre una colección sin conocer su estructura interna</td><td>Un índice de un libro: recorres los capítulos sin ver cómo están almacenados</td></tr>
+</table>
+</div>
+</div>
+
+<!-- ENS -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">ENS — Esquema Nacional de Seguridad</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p>El <strong>Esquema Nacional de Seguridad (ENS)</strong> es el marco legal que establece los requisitos mínimos de seguridad que deben cumplir los sistemas de información de las Administraciones Públicas españolas. Está regulado por el <strong>Real Decreto 311/2022</strong>.</p>
+<h4>Las 5 dimensiones de seguridad — DICAT</h4>
+<p>El ENS evalúa la seguridad en cinco dimensiones, recordadas con el acrónimo <em>DICAT</em>:</p>
+<table class="t">
+<tr><th>Letra</th><th>Dimensión</th><th>Qué protege</th></tr>
+<tr><td><strong>D</strong></td><td>Disponibilidad</td><td>Que el sistema esté accesible cuando se necesita</td></tr>
+<tr><td><strong>I</strong></td><td>Integridad</td><td>Que los datos no sean alterados sin autorización</td></tr>
+<tr><td><strong>C</strong></td><td>Confidencialidad</td><td>Que la información solo la vean los autorizados</td></tr>
+<tr><td><strong>A</strong></td><td>Autenticidad</td><td>Que se pueda verificar la identidad del origen</td></tr>
+<tr><td><strong>T</strong></td><td>Trazabilidad</td><td>Que quede registro de quién hizo qué y cuándo</td></tr>
+</table>
+<h4>Niveles de seguridad</h4>
+<p>Los sistemas se categorizan en tres niveles según el impacto de un incidente de seguridad: <strong>BAJO</strong>, <strong>MEDIO</strong> y <strong>ALTO</strong>. A mayor nivel, más medidas de seguridad obligatorias.</p>
+<div class="tip"><div class="tip-label">Lo que más preguntan</div>La <strong>Trazabilidad</strong> se consigue con sellos de tiempo y registros de auditoría. La <strong>Disponibilidad</strong> se protege con copias de seguridad y redundancia.</div>
+</div>
+</div>
+
+<!-- RGPD -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">RGPD / LOPDGDD — Protección de datos personales</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p>El <strong>RGPD</strong> (Reglamento General de Protección de Datos, UE 2016/679) es la norma europea que regula cómo se tratan los datos personales. En España se complementa con la <strong>LOPDGDD</strong> (Ley Orgánica 3/2018).</p>
+<h4>Principios básicos del tratamiento</h4>
+<ul>
+<li><strong>Licitud, lealtad y transparencia:</strong> el tratamiento debe tener una base legal y el afectado debe saberlo.</li>
+<li><strong>Limitación de la finalidad:</strong> los datos solo se usan para el fin por el que se recogieron.</li>
+<li><strong>Minimización de datos:</strong> solo se recogen los datos estrictamente necesarios.</li>
+<li><strong>Exactitud:</strong> los datos deben estar actualizados.</li>
+<li><strong>Limitación del plazo de conservación:</strong> no se guardan indefinidamente.</li>
+<li><strong>Integridad y confidencialidad:</strong> se protegen con medidas de seguridad adecuadas.</li>
+</ul>
+<h4>Derechos del ciudadano (ARSULIPO)</h4>
+<table class="t">
+<tr><th>Derecho</th><th>Qué permite</th></tr>
+<tr><td><strong>Acceso</strong></td><td>Saber qué datos tienen sobre ti</td></tr>
+<tr><td><strong>Rectificación</strong></td><td>Corregir datos inexactos</td></tr>
+<tr><td><strong>Supresión</strong> ("al olvido")</td><td>Pedir que borren tus datos</td></tr>
+<tr><td><strong>Limitación</strong></td><td>Restringir el tratamiento</td></tr>
+<tr><td><strong>Portabilidad</strong></td><td>Recibir tus datos en formato reutilizable</td></tr>
+<tr><td><strong>Oposición</strong></td><td>Oponerte a ciertos tratamientos</td></tr>
+</table>
+<h4>Plazos que preguntan</h4>
+<ul>
+<li>Notificar una brecha de seguridad a la autoridad de control: <strong>72 horas</strong>.</li>
+<li>Responder a una solicitud de derechos: <strong>1 mes</strong> (prorrogable 2 meses más).</li>
+<li>Sanciones leves: prescriben en <strong>1 año</strong>. Graves: <strong>2 años</strong>. Muy graves: <strong>3 años</strong>.</li>
+<li>Autoridad de control en España: <strong>AEPD</strong> (Agencia Española de Protección de Datos).</li>
+</ul>
+</div>
+</div>
+
+<!-- Métrica v3 -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">Métrica v3 — Metodología de desarrollo de software de la AGE</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p><strong>Métrica v3</strong> es la metodología oficial que usa la Administración General del Estado para desarrollar y mantener sistemas de información. Fue elaborada por el Ministerio de Hacienda y está basada en estándares internacionales.</p>
+<h4>¿Para qué sirve?</h4>
+<p>Proporciona un conjunto de procesos, actividades, tareas y técnicas estandarizadas para gestionar el ciclo de vida completo del software: desde que se detecta una necesidad hasta que el sistema se retira.</p>
+<h4>Procesos principales</h4>
+<table class="t">
+<tr><th>Sigla</th><th>Proceso</th><th>Qué hace</th></tr>
+<tr><td><strong>PSI</strong></td><td>Planificación de SI</td><td>Define el plan de sistemas de información del organismo</td></tr>
+<tr><td><strong>EVS</strong></td><td>Estudio de Viabilidad del Sistema</td><td>Analiza si es viable técnica y económicamente</td></tr>
+<tr><td><strong>ASI</strong></td><td>Análisis del Sistema de Información</td><td>Define QUÉ debe hacer el sistema</td></tr>
+<tr><td><strong>DSI</strong></td><td>Diseño del Sistema de Información</td><td>Define CÓMO lo va a hacer</td></tr>
+<tr><td><strong>CSI</strong></td><td>Construcción del SI</td><td>Programación y pruebas</td></tr>
+<tr><td><strong>IAS</strong></td><td>Implantación y Aceptación</td><td>Puesta en producción y aceptación por el usuario</td></tr>
+<tr><td><strong>MSI</strong></td><td>Mantenimiento del SI</td><td>Mantenimiento correctivo, adaptativo y perfectivo</td></tr>
+</table>
+<h4>Diagramas que usa Métrica v3</h4>
+<ul>
+<li><strong>Diagrama de flujo de datos (DFD):</strong> muestra cómo fluye la información en el sistema.</li>
+<li><strong>Diagrama entidad-relación (E/R):</strong> modela la estructura de datos.</li>
+<li><strong>Diagramas UML:</strong> casos de uso, clases, secuencia, actividad.</li>
+</ul>
+</div>
+</div>
+
+<!-- Git -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">Git — Control de versiones</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p><strong>Git</strong> es un sistema de control de versiones distribuido. Permite guardar el historial de cambios de un proyecto, trabajar en equipo sin pisarse y volver a versiones anteriores si algo sale mal. Es como tener un "historial de deshacer" infinito y compartido.</p>
+<h4>Comandos que preguntan</h4>
+<table class="t">
+<tr><th>Comando</th><th>Qué hace</th></tr>
+<tr><td><code>git init</code></td><td>Crea un nuevo repositorio Git en la carpeta actual</td></tr>
+<tr><td><code>git clone &lt;url&gt;</code></td><td>Descarga una copia completa de un repositorio remoto</td></tr>
+<tr><td><code>git add &lt;archivo&gt;</code></td><td>Prepara un archivo para el siguiente commit (lo añade al "staging area")</td></tr>
+<tr><td><code>git commit -m "mensaje"</code></td><td>Guarda una nueva instantánea (snapshot) del proyecto con un mensaje descriptivo</td></tr>
+<tr><td><code>git log</code></td><td>Muestra el historial de commits anteriores</td></tr>
+<tr><td><code>git status</code></td><td>Muestra el estado actual del directorio de trabajo</td></tr>
+<tr><td><code>git fetch</code></td><td>Descarga cambios del repositorio remoto sin integrarlos</td></tr>
+<tr><td><code>git pull</code></td><td>Descarga cambios del remoto E los integra en la rama actual (fetch + merge)</td></tr>
+<tr><td><code>git push</code></td><td>Sube los commits locales al repositorio remoto</td></tr>
+<tr><td><code>git branch</code></td><td>Muestra las ramas existentes</td></tr>
+<tr><td><code>git merge &lt;rama&gt;</code></td><td>Fusiona una rama con la rama actual</td></tr>
+</table>
+<div class="tip"><div class="tip-label">Diferencia clave fetch vs pull</div><strong>fetch</strong> solo descarga, no modifica tu trabajo. <strong>pull</strong> descarga e integra. Si quieres revisar antes de integrar, usa fetch.</div>
+</div>
+</div>
+
+<!-- Docker -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">Docker — Contenedores de aplicaciones</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p><strong>Docker</strong> permite empaquetar una aplicación con todo lo que necesita (código, dependencias, configuración) en un <strong>contenedor</strong>. El contenedor funciona igual en cualquier máquina, sin el clásico "en mi ordenador funciona".</p>
+<div class="tip"><div class="tip-label">Analogía</div>Un contenedor Docker es como un contenedor de barco: dentro va todo lo que necesita la app, y funciona igual en cualquier puerto (servidor) donde lo pongas.</div>
+<h4>Conceptos básicos</h4>
+<ul>
+<li><strong>Imagen:</strong> la "receta" o plantilla del contenedor. Es estática.</li>
+<li><strong>Contenedor:</strong> una imagen en ejecución. Es dinámico.</li>
+<li><strong>Dockerfile:</strong> archivo de texto que define cómo construir una imagen.</li>
+</ul>
+<h4>Comandos que preguntan</h4>
+<table class="t">
+<tr><th>Comando</th><th>Qué hace</th></tr>
+<tr><td><code>docker run &lt;imagen&gt;</code></td><td>Crea y arranca un contenedor a partir de una imagen</td></tr>
+<tr><td><code>docker ps</code></td><td>Lista los contenedores que están <strong>en ejecución</strong> en este momento</td></tr>
+<tr><td><code>docker ps -a</code></td><td>Lista <strong>todos</strong> los contenedores, incluidos los detenidos</td></tr>
+<tr><td><code>docker stop &lt;id&gt;</code></td><td>Detiene un contenedor en ejecución</td></tr>
+<tr><td><code>docker images</code></td><td>Lista las imágenes disponibles localmente</td></tr>
+<tr><td><code>docker pull &lt;imagen&gt;</code></td><td>Descarga una imagen del registro (Docker Hub)</td></tr>
+<tr><td><code>docker build -t &lt;nombre&gt; .</code></td><td>Construye una imagen a partir del Dockerfile en la carpeta actual</td></tr>
+</table>
+</div>
+</div>
+
+<!-- Linux -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">Linux — Permisos chmod y directorios importantes</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<h4>Permisos en Linux</h4>
+<p>Cada archivo en Linux tiene permisos para tres grupos: el <strong>propietario (u)</strong>, el <strong>grupo (g)</strong> y <strong>otros (o)</strong>. Los permisos son: <strong>r</strong> (lectura=4), <strong>w</strong> (escritura=2), <strong>x</strong> (ejecución=1).</p>
+<p>Con <code>chmod</code> se asignan permisos en formato octal sumando los valores:</p>
+<table class="t">
+<tr><th>Octal</th><th>Binario</th><th>Permisos</th></tr>
+<tr><td>7</td><td>111</td><td>rwx (lectura + escritura + ejecución)</td></tr>
+<tr><td>6</td><td>110</td><td>rw- (lectura + escritura)</td></tr>
+<tr><td>5</td><td>101</td><td>r-x (lectura + ejecución)</td></tr>
+<tr><td>4</td><td>100</td><td>r-- (solo lectura)</td></tr>
+<tr><td>0</td><td>000</td><td>--- (sin permisos)</td></tr>
+</table>
+<p><em>Ejemplo:</em> <code>chmod 755 archivo</code> → propietario: rwx (7), grupo: r-x (5), otros: r-x (5).</p>
+<h4>Directorios importantes</h4>
+<table class="t">
+<tr><th>Directorio</th><th>Contenido</th></tr>
+<tr><td><code>/etc</code></td><td>Archivos de configuración del sistema</td></tr>
+<tr><td><code>/bin</code></td><td>Comandos esenciales del sistema (ls, cp, mv…)</td></tr>
+<tr><td><code>/sbin</code></td><td>Comandos de administración del sistema (para root)</td></tr>
+<tr><td><code>/dev</code></td><td>Archivos de dispositivos (discos, terminales…)</td></tr>
+<tr><td><code>/root</code></td><td>Directorio home del usuario root (administrador)</td></tr>
+<tr><td><code>/home</code></td><td>Directorios personales de los usuarios normales</td></tr>
+<tr><td><code>/var</code></td><td>Datos variables: logs, bases de datos, correo…</td></tr>
+<tr><td><code>/tmp</code></td><td>Archivos temporales (se borran al reiniciar)</td></tr>
+<tr><td><code>/proc</code></td><td>Sistema de archivos virtual con info del kernel y procesos</td></tr>
+</table>
+</div>
+</div>
+
+<!-- ══════════════════════════════════════════════ APARTADO B -->
+<div class="sec-lbl">Apartado B — Lo que puede caer en mayo 2026</div>
+<span class="sec-badge badge-b">Temas emergentes · Alta probabilidad</span>
+
+<!-- AI Act -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">AI Act — Reglamento Europeo de Inteligencia Artificial</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p>El <strong>AI Act</strong> (Reglamento UE 2024/1689) es la primera ley del mundo que regula de forma integral el uso de la inteligencia artificial. Fue aprobado por el Parlamento Europeo en marzo de 2024 y entró en vigor el <strong>2 de agosto de 2024</strong>. Se aplica de forma gradual hasta 2027.</p>
+<h4>Clasificación de riesgos</h4>
+<table class="t">
+<tr><th>Nivel</th><th>Descripción</th><th>Ejemplos</th></tr>
+<tr><td><strong>Inaceptable</strong></td><td>Prohibido. Viola derechos fundamentales.</td><td>Reconocimiento facial en tiempo real en espacios públicos (salvo excepciones), puntuación social por el gobierno, manipulación subliminal</td></tr>
+<tr><td><strong>Alto riesgo</strong></td><td>Permitido con obligaciones estrictas: registro, transparencia, supervisión humana.</td><td>IA en contratación, acceso a educación, servicios esenciales, infraestructuras críticas, justicia penal</td></tr>
+<tr><td><strong>Limitado</strong></td><td>Obligaciones de transparencia: el usuario debe saber que interactúa con IA.</td><td>Chatbots, deepfakes, contenido generado por IA</td></tr>
+<tr><td><strong>Mínimo</strong></td><td>Sin regulación específica.</td><td>Filtros de spam, videojuegos con IA, recomendadores</td></tr>
+</table>
+<div class="warn"><div class="warn-label">Fechas clave</div>Prohibiciones (riesgo inaceptable): aplicables desde <strong>febrero 2025</strong>. Sistemas de IA de propósito general (como GPT): obligaciones desde <strong>agosto 2025</strong>. Sistemas de alto riesgo: <strong>agosto 2026</strong> en adelante.</div>
+</div>
+</div>
+
+<!-- WiFi 7 -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">WiFi 7 — IEEE 802.11be</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p><strong>WiFi 7</strong> es la séptima generación del estándar WiFi, definida por el estándar <strong>IEEE 802.11be</strong>. Fue certificado por la Wi-Fi Alliance en 2024.</p>
+<table class="t">
+<tr><th></th><th>WiFi 6 (802.11ax)</th><th>WiFi 7 (802.11be)</th></tr>
+<tr><td><strong>Velocidad máxima teórica</strong></td><td>9,6 Gbps</td><td><strong>46 Gbps</strong></td></tr>
+<tr><td><strong>Bandas</strong></td><td>2,4 GHz y 5 GHz</td><td><strong>2,4 GHz, 5 GHz y 6 GHz</strong></td></tr>
+<tr><td><strong>Ancho de canal máximo</strong></td><td>160 MHz</td><td><strong>320 MHz</strong></td></tr>
+<tr><td><strong>Multi-Link Operation (MLO)</strong></td><td>No</td><td><strong>Sí</strong> (usa varias bandas simultáneamente)</td></tr>
+</table>
+<p>La novedad más importante de WiFi 7 es el <strong>MLO</strong> (Multi-Link Operation): el dispositivo puede conectarse a varias bandas al mismo tiempo, aumentando velocidad y reduciendo latencia.</p>
+</div>
+</div>
+
+<!-- NIS2 -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">NIS2 — Directiva de Seguridad de Redes e Información</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p>La <strong>Directiva NIS2</strong> (Network and Information Security 2, Directiva UE 2022/2555) es la evolución de la anterior directiva NIS (2016) y establece medidas para garantizar un nivel común de ciberseguridad en la UE. Los estados miembros debían transponerla antes del <strong>18 de octubre de 2024</strong>.</p>
+<h4>Diferencias principales con NIS1</h4>
+<table class="t">
+<tr><th></th><th>NIS 1 (2016)</th><th>NIS 2 (2022)</th></tr>
+<tr><td><strong>Ámbito</strong></td><td>Sectores esenciales (energía, transporte, banca…)</td><td>Ampliado: añade administraciones públicas, sanidad, gestión de residuos, espacio, fabricación crítica</td></tr>
+<tr><td><strong>Sanciones</strong></td><td>Variables por país</td><td>Hasta <strong>10 M€ o 2% facturación global</strong> (entidades importantes) / hasta <strong>7 M€ o 1,4%</strong></td></tr>
+<tr><td><strong>Responsabilidad</strong></td><td>No específica</td><td>Los órganos de dirección pueden ser responsables personalmente</td></tr>
+<tr><td><strong>Notificación incidentes</strong></td><td>Sin plazo armonizado</td><td><strong>24h</strong> alerta temprana / <strong>72h</strong> notificación completa</td></tr>
+</table>
+</div>
+</div>
+
+<!-- Zero Trust -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">Zero Trust — No confíes en nadie por defecto</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p><strong>Zero Trust</strong> ("Confianza Cero") es un modelo de seguridad que parte de la premisa de que <strong>no se debe confiar en nadie ni en nada por defecto</strong>, ni dentro ni fuera de la red corporativa. Todo acceso debe verificarse.</p>
+<h4>Modelo tradicional vs Zero Trust</h4>
+<table class="t">
+<tr><th></th><th>Modelo perimetral clásico</th><th>Zero Trust</th></tr>
+<tr><td><strong>Filosofía</strong></td><td>"Dentro de la red = de confianza"</td><td>"Nunca confíes, verifica siempre"</td></tr>
+<tr><td><strong>Problema</strong></td><td>Si un atacante entra, tiene acceso a todo</td><td>Limita el daño porque cada acceso se verifica</td></tr>
+<tr><td><strong>Acceso</strong></td><td>Basado en ubicación (dentro/fuera)</td><td>Basado en identidad, dispositivo y contexto</td></tr>
+</table>
+<h4>Principios básicos</h4>
+<ul>
+<li><strong>Verificar explícitamente:</strong> autenticar y autorizar siempre, basándose en todos los datos disponibles.</li>
+<li><strong>Mínimo privilegio:</strong> dar solo el acceso estrictamente necesario.</li>
+<li><strong>Asumir la brecha:</strong> diseñar pensando en que el sistema ya ha sido comprometido.</li>
+</ul>
+</div>
+</div>
+
+<!-- IA generativa vs discriminativa -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">IA generativa vs IA discriminativa</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<h4>IA discriminativa</h4>
+<p>Aprende a <strong>clasificar</strong> o <strong>distinguir</strong> entre categorías a partir de datos existentes. No crea nada nuevo, solo decide a qué categoría pertenece algo.</p>
+<p><em>Ejemplos:</em> detectores de spam (¿es spam o no?), reconocimiento de imágenes (¿es un gato o un perro?), diagnóstico médico.</p>
+<h4>IA generativa</h4>
+<p>Aprende patrones de los datos de entrenamiento y los usa para <strong>crear contenido nuevo</strong>: texto, imágenes, audio, vídeo o código que no existía antes.</p>
+<p><em>Ejemplos:</em> ChatGPT y Claude (texto), DALL-E y Midjourney (imágenes), Sora (vídeo), GitHub Copilot (código).</p>
+<div class="tip"><div class="tip-label">Diferencia clave</div>La discriminativa pregunta "¿a qué categoría pertenece esto?". La generativa pregunta "¿qué contenido nuevo puedo crear similar a lo que he aprendido?".</div>
+</div>
+</div>
+
+<!-- EUDI Wallet -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">EUDI Wallet — Cartera de identidad digital europea</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p>El <strong>EUDI Wallet</strong> (European Digital Identity Wallet) es la cartera de identidad digital que la Unión Europea está desarrollando para que todos los ciudadanos europeos puedan identificarse y compartir atributos verificados de forma digital en cualquier país de la UE.</p>
+<h4>¿Qué permite hacer?</h4>
+<ul>
+<li>Identificarse ante administraciones públicas de cualquier país de la UE.</li>
+<li>Compartir solo los datos necesarios (por ejemplo, demostrar que eres mayor de edad sin revelar tu fecha de nacimiento exacta).</li>
+<li>Almacenar documentos digitales: carnet de conducir, título universitario, recetas médicas.</li>
+</ul>
+<h4>Relación con DNIe y Cl@ve en España</h4>
+<ul>
+<li>El <strong>DNIe</strong> (Documento Nacional de Identidad electrónico) ya permite identificación digital en España, pero no está interoperable a nivel europeo de forma sencilla.</li>
+<li>El sistema <strong>Cl@ve</strong> es el sistema de identificación de la Administración española (Cl@ve PIN, Cl@ve permanente).</li>
+<li>El EUDI Wallet será compatible con estos sistemas y permitirá que el DNIe y Cl@ve funcionen en el contexto europeo.</li>
+</ul>
+<p>El marco legal es el <strong>Reglamento eIDAS 2</strong> (Reglamento UE 2024/1183), que obliga a los estados miembros a ofrecer el EUDI Wallet a sus ciudadanos.</p>
+</div>
+</div>
+
+<!-- USB4 v2 -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">USB4 v2 — La última generación de USB</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p><strong>USB4 versión 2.0</strong> fue anunciado en 2022 por el USB Implementers Forum. Duplica la velocidad de la versión anterior.</p>
+<table class="t">
+<tr><th>Estándar</th><th>Velocidad máxima</th><th>Conector</th></tr>
+<tr><td>USB 3.2 Gen 2x2</td><td>20 Gbps</td><td>USB-C</td></tr>
+<tr><td>USB4 v1.0</td><td>40 Gbps</td><td>USB-C</td></tr>
+<tr><td><strong>USB4 v2.0</strong></td><td><strong>80 Gbps</strong></td><td>USB-C</td></tr>
+<tr><td>Thunderbolt 4</td><td>40 Gbps</td><td>USB-C</td></tr>
+</table>
+<h4>Compatibilidad</h4>
+<p>USB4 v2 es compatible hacia atrás con versiones anteriores de USB (USB 3.x, USB 2.0) y con Thunderbolt 3 y 4. Siempre usa conector <strong>USB-C</strong>.</p>
+<div class="tip"><div class="tip-label">Lo que más pueden preguntar</div>La velocidad de USB4 v2 es <strong>80 Gbps</strong>. El conector es siempre <strong>USB-C</strong>. Es compatible con versiones anteriores.</div>
+</div>
+</div>
+
+</div><!-- /app -->
+
+<script>
+function toggle(hdr){
+  hdr.classList.toggle('open');
+  const body=hdr.nextElementSibling;
+  body.classList.toggle('open');
+}
+</script>
+</body>
+</html>
