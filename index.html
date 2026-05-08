@@ -569,6 +569,7 @@ let questions=[], currentIndex=0, answered=false, score=0, total=0;
 let wrongIds=[], mode='all', filterYear='all', filterSection='all';
 let savedSession=null, deferredPrompt=null, installDismissed=false;
 let saberMasCache={};
+let currentShuffled=[0,1,2,3];
 
 // ── PERSISTENCE ───────────────────────────────────────────────────────────────
 function save(){
@@ -720,6 +721,7 @@ function renderQuestion(){
   const q=questions[currentIndex];
   const pct=Math.round((currentIndex/questions.length)*100);
   const lets=['a','b','c','d'];
+  currentShuffled=q.anulada?[0,1,2,3]:shuffle([0,1,2,3]);
   document.getElementById('main').innerHTML=`
     <div class="qprog fu">
       <div class="pmeta"><span class="pctr">${currentIndex+1} / ${questions.length}</span><span class="psco">${score} correctas</span></div>
@@ -731,7 +733,7 @@ function renderQuestion(){
     <div class="qnum fu fu1">Pregunta ${q.id}</div>
     <p class="qtext fu fu2">${q.q}</p>
     <div class="opts fu fu3" id="opts">
-      ${q.opts.map((o,i)=>`<div class="opt" id="o${i}" onclick="pick(${i})"><span class="ol">${lets[i]}</span><span class="otxt">${o}</span></div>`).join('')}
+      ${currentShuffled.map((origIdx,visualPos)=>`<div class="opt" id="o${visualPos}" onclick="pick(${visualPos})"><span class="ol">${lets[visualPos]}</span><span class="otxt">${q.opts[origIdx]}</span></div>`).join('')}
     </div>
     <div id="fb"></div>
     <div class="nav fu fu4" id="nav">
@@ -748,21 +750,23 @@ function pick(i){
   const q=questions[currentIndex];
   const lets=['a','b','c','d'];
   document.querySelectorAll('.opt').forEach(o=>o.classList.add('dis'));
-  const ok=i===q.answer;
+  const origIdx=currentShuffled[i];
+  const ok=origIdx===q.answer;
+  const correctVisualPos=currentShuffled.indexOf(q.answer);
   if(ok)score++;
   else if(!wrongIds.find(w=>w.id===q.id&&w.year===q.year)) wrongIds.push({id:q.id,year:q.year});
-  document.getElementById('o'+q.answer).classList.add('ok');
+  document.getElementById('o'+correctVisualPos).classList.add('ok');
   if(!ok)document.getElementById('o'+i).classList.add('no');
-  document.querySelectorAll('.opt').forEach((o,j)=>{if(j!==i&&j!==q.answer)o.classList.add('dim');});
+  document.querySelectorAll('.opt').forEach((o,j)=>{if(j!==i&&j!==correctVisualPos)o.classList.add('dim');});
 
-  const rows=q.opts.map((o,j)=>{
-    const cls=j===q.answer?'cok':j===i&&!ok?'cno':'';
-    const mk=j===q.answer?'✓':'✗';
-    return `<div class="fbor ${cls}"><span class="fbol">${lets[j]})</span><span class="fbom">${mk}</span><span>${q.expOpts[j]}</span></div>`;
+  const rows=currentShuffled.map((origJ,visualJ)=>{
+    const cls=origJ===q.answer?'cok':visualJ===i&&!ok?'cno':'';
+    const mk=origJ===q.answer?'✓':'✗';
+    return `<div class="fbor ${cls}"><span class="fbol">${lets[visualJ]})</span><span class="fbom">${mk}</span><span>${q.expOpts[origJ]}</span></div>`;
   }).join('');
 
   document.getElementById('fb').innerHTML=`<div class="fb ${ok?'ok':'no'} fu">
-    <div class="fbv">${ok?'✓ Correcto':'✗ Incorrecto — respuesta correcta: opción '+lets[q.answer]}</div>
+    <div class="fbv">${ok?'✓ Correcto':'✗ Incorrecto — respuesta correcta: opción '+lets[correctVisualPos]}</div>
     <div class="fbe">${q.explanation}</div>
     <div class="fbo">${rows}</div>
   </div>
