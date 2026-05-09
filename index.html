@@ -47,6 +47,7 @@ body::before{content:'';position:fixed;top:-50%;left:-50%;width:200%;height:200%
 .sbtn.on{border-color:var(--a);background:var(--s2)}
 .sbtn-n{font-size:13px;font-weight:500;color:var(--t);margin-bottom:2px}
 .sbtn-c{font-size:11px;font-family:var(--m);color:var(--t3)}
+.blq-pct{color:var(--a2)}
 .sbtn.on .sbtn-n{color:var(--a2)}
 .wbtn{width:100%;background:var(--s);border:1px solid var(--wr);border-radius:var(--r);padding:11px 14px;cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;transition:var(--tr)}
 .wbtn:hover{background:var(--s2)}
@@ -730,11 +731,16 @@ let savedSession=null, deferredPrompt=null, installDismissed=false;
 let saberMasCache={};
 let currentShuffled=[0,1,2,3];
 let activeContextKey=null;
+let statsBloque={};
+
+function defaultStats(){
+  return {p1:{score:0,total:0},S1_2019:{score:0,total:0},S2_2019:{score:0,total:0},S1_2022:{score:0,total:0},S2_2022:{score:0,total:0},S1_2024:{score:0,total:0},S2_2024:{score:0,total:0}};
+}
 
 // ── PERSISTENCE ───────────────────────────────────────────────────────────────
 function save(){
   try{
-    localStorage.setItem('tai_v2',JSON.stringify({score,total,wrongIds,mode,filterYear,filterSection}));
+    localStorage.setItem('tai_v2',JSON.stringify({score,total,wrongIds,mode,filterYear,filterSection,statsBloque}));
     if(answered===false && currentIndex>0){
       localStorage.setItem('tai_session',JSON.stringify({
         qIds:questions.map(q=>q.id+'_'+q.year),
@@ -747,7 +753,7 @@ function save(){
 function loadState(){
   try{
     const d=JSON.parse(localStorage.getItem('tai_v2')||'null');
-    if(d){score=d.score||0;total=d.total||0;wrongIds=d.wrongIds||[];mode=d.mode||'all';filterYear=d.filterYear||'all';filterSection=d.filterSection||'all';}
+    if(d){score=d.score||0;total=d.total||0;wrongIds=d.wrongIds||[];mode=d.mode||'all';filterYear=d.filterYear||'all';filterSection=d.filterSection||'all';statsBloque=Object.assign(defaultStats(),d.statsBloque||{});}
     const s=JSON.parse(localStorage.getItem('tai_session')||'null');
     if(s && s.idx>0 && s.idx<(s.qIds||[]).length){savedSession=s;}
   }catch(e){}
@@ -756,6 +762,13 @@ function loadState(){
 function clearSession(){try{localStorage.removeItem('tai_session');}catch(e){}}
 
 // ── PWA ───────────────────────────────────────────────────────────────────────
+window.addEventListener('pagehide',()=>{
+  if(questions.length&&currentIndex>0){
+    const ans=answered;answered=false;
+    save();
+    answered=ans;
+  }
+});
 window.addEventListener('beforeinstallprompt',e=>{
   e.preventDefault(); deferredPrompt=e;
   if(!installDismissed) showInstallBanner();
@@ -799,7 +812,6 @@ function sectionCount(sec,yr){
 // ── RENDER HOME ───────────────────────────────────────────────────────────────
 function renderHome(){
   activeContextKey=null;
-  clearSession();
   const pct=total>0?Math.round(score/total*100):0;
   const tot=sectionCount(filterSection,filterYear);
   const wn=wrongIds.length;
@@ -838,22 +850,26 @@ function renderHome(){
     <div class="sgrid fu fu2" style="grid-template-columns:1fr">
       <button class="sbtn" onclick="startP1()">
         <div class="sbtn-n">Primera parte${filterYear!=='all'?' · '+filterYear:''}</div>
-        <div class="sbtn-c">${sectionCount('p1',filterYear)} preguntas</div>
+        <div class="sbtn-c">${sectionCount('p1',filterYear)} preguntas${statsBloque.p1&&statsBloque.p1.total>0?' · <span class="blq-pct">'+Math.round(statsBloque.p1.score/statsBloque.p1.total*100)+'% acierto</span>':''}</div>
       </button>
     </div>
     <div class="lbl fu fu3">Supuestos prácticos</div>
     <div class="sgrid fu fu3" style="grid-template-columns:1fr">
       ${(()=>{
         const todos=[
-          {key:'S1_2019',yr:'2019',sec:'s1',n:'Supuesto I · 2019',d:'Gestión de procesos selectivos'},
-          {key:'S2_2019',yr:'2019',sec:'s2',n:'Supuesto II · 2019',d:'Integración DCM y CHT'},
-          {key:'S1_2022',yr:'2022',sec:'s1',n:'Supuesto I · 2022',d:'Representación con Cl@ve PIN'},
-          {key:'S2_2022',yr:'2022',sec:'s2',n:'Supuesto II · 2022',d:'Segmentación de red'},
-          {key:'S1_2024',yr:'2024',sec:'s1',n:'Supuesto I · 2024',d:'Sistema de gestión de becas'},
-          {key:'S2_2024',yr:'2024',sec:'s2',n:'Supuesto II · 2024',d:'Infraestructura OEOF'}
+          {key:'S1_2019',yr:'2019',sec:'s1',n:'Supuesto I · 2019'},
+          {key:'S2_2019',yr:'2019',sec:'s2',n:'Supuesto II · 2019'},
+          {key:'S1_2022',yr:'2022',sec:'s1',n:'Supuesto I · 2022'},
+          {key:'S2_2022',yr:'2022',sec:'s2',n:'Supuesto II · 2022'},
+          {key:'S1_2024',yr:'2024',sec:'s1',n:'Supuesto I · 2024'},
+          {key:'S2_2024',yr:'2024',sec:'s2',n:'Supuesto II · 2024'}
         ];
         const lista=filterYear==='all'?todos:todos.filter(s=>s.yr===filterYear);
-        return lista.map(s=>`<button class="sbtn" onclick="startSupuesto('${s.key}')"><div class="sbtn-n">${s.n}</div><div class="sbtn-c">${sectionCount(s.sec,s.yr)} preguntas · con enunciado</div></button>`).join('');
+        return lista.map(s=>{
+          const st=statsBloque[s.key];
+          const pctStr=st&&st.total>0?' · <span class="blq-pct">'+Math.round(st.score/st.total*100)+'% acierto</span>':'';
+          return `<button class="sbtn" onclick="startSupuesto('${s.key}')"><div class="sbtn-n">${s.n}</div><div class="sbtn-c">${sectionCount(s.sec,s.yr)} preguntas · con enunciado${pctStr}</div></button>`;
+        }).join('');
       })()}
     </div>
     ${wn>0?`<button class="wbtn fu fu4" onclick="startWrong()"><span class="wbt">Repasar solo falladas</span><span class="wbc">${wn} preguntas</span></button>`:''}
@@ -894,7 +910,7 @@ function startQuiz(){
   questions=buildQuestions();
   if(!questions.length){alert('No hay preguntas con los filtros seleccionados.');return;}
   currentIndex=0;answered=false;score=0;total=0;
-  clearSession();renderQuestion();
+  savedSession=null;clearSession();renderQuestion();
 }
 
 function resumeSession(){
@@ -953,6 +969,8 @@ function pick(i){
   const correctVisualPos=currentShuffled.indexOf(q.answer);
   if(ok)score++;
   else if(!wrongIds.find(w=>w.id===q.id&&w.year===q.year)) wrongIds.push({id:q.id,year:q.year});
+  const bloqueKey=activeContextKey||(filterSection==='p1'?'p1':null);
+  if(bloqueKey&&statsBloque[bloqueKey]){statsBloque[bloqueKey].total++;if(ok)statsBloque[bloqueKey].score++;}
   document.getElementById('o'+correctVisualPos).classList.add('ok');
   if(!ok)document.getElementById('o'+i).classList.add('no');
   document.querySelectorAll('.opt').forEach((o,j)=>{if(j!==i&&j!==correctVisualPos)o.classList.add('dim');});
