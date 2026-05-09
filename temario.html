@@ -138,6 +138,40 @@ table.t tr:hover td{background:rgba(255,255,255,.02)}
 </div>
 </div>
 
+<!-- TCP/IP -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">Modelo TCP/IP — La arquitectura real de Internet</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p>El <strong>Modelo TCP/IP</strong> es el modelo de red que realmente usa Internet. A diferencia del modelo OSI (que es un modelo de referencia teórico), TCP/IP es la arquitectura práctica que implementan todos los sistemas conectados a la red. Fue desarrollado por DARPA en los años 70.</p>
+
+<h4>Las 4 capas del modelo TCP/IP</h4>
+<table class="t">
+<tr><th>Capa</th><th>Función</th><th>Protocolos principales</th></tr>
+<tr><td><strong>4. Aplicación</strong></td><td>Interfaz con el usuario. Equivale a las capas 5, 6 y 7 del OSI.</td><td>HTTP, HTTPS, FTP, DNS, SMTP, DHCP, SSH</td></tr>
+<tr><td><strong>3. Transporte</strong></td><td>Comunicación extremo a extremo entre aplicaciones.</td><td>TCP, UDP</td></tr>
+<tr><td><strong>2. Internet</strong></td><td>Encaminamiento de paquetes entre redes. Direccionamiento lógico (IP).</td><td>IP, ICMP, ARP, IGMP</td></tr>
+<tr><td><strong>1. Acceso a red</strong></td><td>Comunicación física. Equivale a las capas 1 y 2 del OSI.</td><td>Ethernet, WiFi (802.11), PPP</td></tr>
+</table>
+
+<h4>Correspondencia OSI vs TCP/IP</h4>
+<table class="t">
+<tr><th>Modelo OSI (7 capas)</th><th>Modelo TCP/IP (4 capas)</th></tr>
+<tr><td>7. Aplicación<br>6. Presentación<br>5. Sesión</td><td><strong>Aplicación</strong></td></tr>
+<tr><td>4. Transporte</td><td><strong>Transporte</strong></td></tr>
+<tr><td>3. Red</td><td><strong>Internet</strong></td></tr>
+<tr><td>2. Enlace de datos<br>1. Física</td><td><strong>Acceso a red</strong></td></tr>
+</table>
+
+<h4>Diferencia práctica</h4>
+<p>El <strong>modelo OSI</strong> se estudia porque es más detallado y facilita la enseñanza. El <strong>modelo TCP/IP</strong> es el que realmente usan los sistemas operativos, routers y servidores para comunicarse. OSI es el manual de instrucciones; TCP/IP es el motor que funciona.</p>
+
+<div class="tip"><div class="tip-label">Lo que más preguntan</div><strong>1.</strong> A qué capa TCP/IP pertenece cada protocolo: HTTP, DNS, FTP → Aplicación. TCP, UDP → Transporte. IP, ICMP, ARP → Internet. Ethernet, WiFi → Acceso a red. <strong>2.</strong> Las 7 capas OSI se agrupan en 4 capas TCP/IP: las capas 5-7 se funden en Aplicación; las capas 1-2 se funden en Acceso a red.</div>
+</div>
+</div>
+
 <!-- DNS, DHCP, HTTP/HTTPS -->
 <div class="acc-item fu">
 <div class="acc-hdr" onclick="toggle(this)">
@@ -182,15 +216,82 @@ table.t tr:hover td{background:rgba(255,255,255,.02)}
 </div>
 <div class="acc-body">
 <p>Normalizar una base de datos significa organizarla para <strong>eliminar redundancias</strong> y evitar problemas al insertar, actualizar o borrar datos. Hay formas normales que se aplican en orden.</p>
-<h4>1ª Forma Normal (1FN)</h4>
-<p>Cada celda de la tabla debe contener un <strong>único valor atómico</strong> (indivisible). No se permiten listas ni conjuntos en una celda.</p>
-<p><em>Mal:</em> columna "Teléfonos" con valor "666111222, 666333444". <em>Bien:</em> una fila por teléfono.</p>
-<h4>2ª Forma Normal (2FN)</h4>
-<p>Debe estar en 1FN y además todos los atributos que no son clave deben depender de <strong>la clave completa</strong>, no solo de una parte de ella. Aplica cuando hay claves compuestas.</p>
-<p><em>Ejemplo:</em> si la clave es (IdPedido, IdProducto), el nombre del producto solo depende de IdProducto → hay que sacarlo a otra tabla.</p>
-<h4>3ª Forma Normal (3FN)</h4>
-<p>Debe estar en 2FN y además no debe haber <strong>dependencias transitivas</strong>: un atributo no clave no debe depender de otro atributo no clave.</p>
-<p><em>Ejemplo:</em> si tienes CodPostal → Ciudad en una tabla de clientes, City depende de CodPostal (no de la clave primaria IdCliente) → hay que separarlo.</p>
+
+<h4>1ª Forma Normal (1FN) — Eliminar grupos repetitivos</h4>
+<p>Cada celda debe contener un <strong>único valor atómico</strong>. No se permiten listas ni conjuntos en una celda.</p>
+<p><em>Ejemplo — tabla de opositores SIN normalizar:</em></p>
+<table class="t">
+<tr><th>Opositor</th><th>Teléfonos</th><th>Nota</th></tr>
+<tr><td>Laura García</td><td>611222333, 644555666</td><td>8,5</td></tr>
+<tr><td>Carlos Ruiz</td><td>677888999</td><td>6,2</td></tr>
+<tr><td>Ana Pérez</td><td>633111222, 699333444, 655777888</td><td>7,8</td></tr>
+</table>
+<p>El campo "Teléfonos" contiene varios valores en una misma celda. Viola la 1FN.</p>
+<p><em>Después de 1FN — cada celda tiene un solo valor:</em></p>
+<table class="t">
+<tr><th>Opositor</th><th>Teléfono</th><th>Nota</th></tr>
+<tr><td>Laura García</td><td>611222333</td><td>8,5</td></tr>
+<tr><td>Laura García</td><td>644555666</td><td>8,5</td></tr>
+<tr><td>Carlos Ruiz</td><td>677888999</td><td>6,2</td></tr>
+<tr><td>Ana Pérez</td><td>633111222</td><td>7,8</td></tr>
+<tr><td>Ana Pérez</td><td>699333444</td><td>7,8</td></tr>
+<tr><td>Ana Pérez</td><td>655777888</td><td>7,8</td></tr>
+</table>
+<p>Ahora cada celda tiene un valor atómico. La clave compuesta es (Opositor, Teléfono).</p>
+
+<h4>2ª Forma Normal (2FN) — Eliminar dependencias parciales</h4>
+<p>Debe estar en 1FN y todos los atributos no clave deben depender de <strong>la clave completa</strong>, no solo de una parte. Aplica con claves compuestas.</p>
+<p>En la tabla anterior, la <strong>Nota</strong> depende solo de <strong>Opositor</strong>, no del teléfono. Si Laura cambia de nota, hay que modificar dos filas. Es una <em>dependencia parcial</em>.</p>
+<p><em>Solución — separamos en dos tablas:</em></p>
+<table class="t">
+<tr><th colspan="2">OPOSITORES</th></tr>
+<tr><th>Opositor</th><th>Nota</th></tr>
+<tr><td>Laura García</td><td>8,5</td></tr>
+<tr><td>Carlos Ruiz</td><td>6,2</td></tr>
+<tr><td>Ana Pérez</td><td>7,8</td></tr>
+</table>
+<br>
+<table class="t">
+<tr><th colspan="2">TELÉFONOS</th></tr>
+<tr><th>Teléfono</th><th>Opositor</th></tr>
+<tr><td>611222333</td><td>Laura García</td></tr>
+<tr><td>644555666</td><td>Laura García</td></tr>
+<tr><td>677888999</td><td>Carlos Ruiz</td></tr>
+<tr><td>633111222</td><td>Ana Pérez</td></tr>
+<tr><td>699333444</td><td>Ana Pérez</td></tr>
+<tr><td>655777888</td><td>Ana Pérez</td></tr>
+</table>
+<p>Ahora <strong>Nota</strong> depende de la clave completa (Opositor). Cada tabla está en 2FN.</p>
+
+<h4>3ª Forma Normal (3FN) — Eliminar dependencias transitivas</h4>
+<p>Debe estar en 2FN y no debe haber <strong>dependencias transitivas</strong>: un atributo no clave que depende de otro atributo no clave.</p>
+<p>Añadamos "CodPostal" y "Ciudad" a la tabla OPOSITORES:</p>
+<table class="t">
+<tr><th>Opositor</th><th>Nota</th><th>CodPostal</th><th>Ciudad</th></tr>
+<tr><td>Laura García</td><td>8,5</td><td>28001</td><td>Madrid</td></tr>
+<tr><td>Carlos Ruiz</td><td>6,2</td><td>08001</td><td>Barcelona</td></tr>
+<tr><td>Ana Pérez</td><td>7,8</td><td>41001</td><td>Sevilla</td></tr>
+</table>
+<p><strong>Ciudad</strong> depende de <strong>CodPostal</strong>, no de Opositor. Es transitiva: Opositor → CodPostal → Ciudad.</p>
+<p><em>Solución — extraemos los códigos postales:</em></p>
+<table class="t">
+<tr><th colspan="3">OPOSITORES</th></tr>
+<tr><th>Opositor</th><th>Nota</th><th>CodPostal</th></tr>
+<tr><td>Laura García</td><td>8,5</td><td>28001</td></tr>
+<tr><td>Carlos Ruiz</td><td>6,2</td><td>08001</td></tr>
+<tr><td>Ana Pérez</td><td>7,8</td><td>41001</td></tr>
+</table>
+<br>
+<table class="t">
+<tr><th colspan="2">COD_POSTALES</th></tr>
+<tr><th>CodPostal</th><th>Ciudad</th></tr>
+<tr><td>28001</td><td>Madrid</td></tr>
+<tr><td>08001</td><td>Barcelona</td></tr>
+<tr><td>41001</td><td>Sevilla</td></tr>
+</table>
+<p>Ahora <strong>Ciudad</strong> depende de <strong>CodPostal</strong>, que es clave primaria en su tabla. OPOSITORES está en 3FN.</p>
+
+<div class="tip"><div class="tip-label">Regla mnemotécnica</div>«La <strong>clave</strong>, toda la <strong>clave</strong> y nada más que la <strong>clave</strong>» → 1FN: la clave existe (valores atómicos). 2FN: toda la clave (sin dependencias parciales). 3FN: nada más que la clave (sin dependencias transitivas).</div>
 </div>
 </div>
 
@@ -209,8 +310,10 @@ table.t tr:hover td{background:rgba(255,255,255,.02)}
 <tr><td><strong>Adapter</strong></td><td>Estructural</td><td>Permite que clases con interfaces incompatibles trabajen juntas</td><td>Un adaptador de enchufe europeo a americano</td></tr>
 <tr><td><strong>Facade</strong></td><td>Estructural</td><td>Proporciona una interfaz simplificada a un sistema complejo</td><td>El mando a distancia: oculta la complejidad del televisor</td></tr>
 <tr><td><strong>Proxy</strong></td><td>Estructural</td><td>Controla el acceso a otro objeto (puede añadir caché, seguridad, etc.)</td><td>Un abogado que actúa en nombre de su cliente</td></tr>
+<tr><td><strong>Observer</strong></td><td>Comportamiento</td><td>Notifica automáticamente a múltiples objetos cuando el estado de otro cambia</td><td>Una lista de difusión: cuando alguien escribe, todos lo reciben al instante</td></tr>
 <tr><td><strong>Iterator</strong></td><td>Comportamiento</td><td>Recorre una colección sin conocer su estructura interna</td><td>Un índice de un libro: recorres los capítulos sin ver cómo están almacenados</td></tr>
 </table>
+<div class="tip"><div class="tip-label">Singleton en el examen</div>Es el patrón más preguntado junto a Decorator. Aparece cuando se necesita <strong>una única conexión a base de datos</strong>, un <strong>registro de configuración global</strong> o un <strong>punto de acceso centralizado</strong> a un recurso compartido. Pistas en código: constructor <strong>privado</strong> y método estático <code>getInstance()</code> que devuelve siempre la misma instancia.</div>
 </div>
 </div>
 
@@ -396,6 +499,60 @@ table.t tr:hover td{background:rgba(255,255,255,.02)}
 </div>
 </div>
 
+<!-- UML -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">UML — Diagramas principales para modelar software</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p><strong>UML</strong> (Unified Modeling Language) es un lenguaje gráfico para visualizar, especificar y documentar los elementos de un sistema de software. No es una metodología, sino una <strong>notación estándar</strong> que se usa dentro de metodologías como Métrica v3.</p>
+
+<h4>Diagramas que más preguntan</h4>
+<table class="t">
+<tr><th>Diagrama</th><th>Tipo</th><th>Qué muestra</th></tr>
+<tr><td><strong>Casos de uso</strong></td><td>Comportamiento</td><td>Qué funciones ofrece el sistema y quién interactúa (actores). Ej: un "Usuario" puede "Solicitar certificado".</td></tr>
+<tr><td><strong>Clases</strong></td><td>Estructural</td><td>Entidades del sistema con atributos y relaciones. El más usado en la fase de diseño.</td></tr>
+<tr><td><strong>Secuencia</strong></td><td>Comportamiento</td><td>Cómo se comunican los objetos a lo largo del tiempo, con mensajes en orden cronológico.</td></tr>
+<tr><td><strong>Actividad</strong></td><td>Comportamiento</td><td>Flujo de trabajo: acciones, decisiones, bifurcaciones. Similar a un diagrama de flujo.</td></tr>
+</table>
+
+<h4>Relación con Métrica v3</h4>
+<p>En Métrica v3, UML se usa principalmente en las fases de <strong>Análisis (ASI)</strong> — donde se crean los casos de uso — y <strong>Diseño (DSI)</strong> — donde se desarrollan diagramas de clases y secuencia.</p>
+
+<div class="tip"><div class="tip-label">Clave de examen</div>El <strong>diagrama de casos de uso</strong> responde a "qué hace el sistema" (no cómo). El <strong>diagrama de clases</strong> responde a "cómo se estructuran los datos". Son los dos más preguntados en los exámenes TAI.</div>
+</div>
+</div>
+
+<!-- Cloud Computing -->
+<div class="acc-item fu">
+<div class="acc-hdr" onclick="toggle(this)">
+  <span class="acc-title">Cloud Computing — IaaS, PaaS, SaaS y tipos de nube</span>
+  <span class="acc-arrow">▼</span>
+</div>
+<div class="acc-body">
+<p>El <strong>Cloud Computing</strong> (computación en la nube) es un modelo que permite acceder a recursos informáticos (servidores, almacenamiento, bases de datos, software) a través de internet, sin necesidad de gestionar la infraestructura física.</p>
+
+<h4>Modelos de servicio</h4>
+<table class="t">
+<tr><th>Modelo</th><th>Qué ofrece</th><th>El usuario gestiona</th><th>Ejemplos</th></tr>
+<tr><td><strong>IaaS</strong></td><td>Infraestructura: servidores virtuales, almacenamiento, redes</td><td>SO, aplicaciones, datos</td><td>AWS EC2, Azure VMs</td></tr>
+<tr><td><strong>PaaS</strong></td><td>Plataforma para desarrollar y desplegar apps</td><td>Solo apps y datos</td><td>Google App Engine, Heroku</td></tr>
+<tr><td><strong>SaaS</strong></td><td>Software listo para usar, sin instalación</td><td>Solo los datos</td><td>Gmail, Office 365, Salesforce</td></tr>
+</table>
+
+<h4>Tipos de nube</h4>
+<ul>
+<li><strong>Nube pública:</strong> recursos compartidos de un proveedor externo (AWS, Azure, Google Cloud).</li>
+<li><strong>Nube privada:</strong> uso exclusivo de una organización. Más control y seguridad.</li>
+<li><strong>Nube híbrida:</strong> combina pública y privada. El modelo más común en grandes organizaciones.</li>
+<li><strong>Nube comunitaria:</strong> varios organismos con necesidades compartidas usan la misma infraestructura.</li>
+</ul>
+
+<div class="tip"><div class="tip-label">Analogía</div><strong>IaaS</strong> es como alquilar un terreno vacío (tú construyes). <strong>PaaS</strong> es como alquilar un piso amueblado (llevas tus cosas). <strong>SaaS</strong> es como un hotel (todo incluido, solo usas).</div>
+</div>
+</div>
+
 <!-- ══════════════════════════════════════════════ APARTADO B -->
 <div class="sec-lbl">Apartado B — Lo que puede caer en mayo 2026</div>
 <span class="sec-badge badge-b">Temas emergentes · Alta probabilidad</span>
@@ -408,15 +565,52 @@ table.t tr:hover td{background:rgba(255,255,255,.02)}
 </div>
 <div class="acc-body">
 <p>El <strong>AI Act</strong> (Reglamento UE 2024/1689) es la primera ley del mundo que regula de forma integral el uso de la inteligencia artificial. Fue aprobado por el Parlamento Europeo en marzo de 2024 y entró en vigor el <strong>2 de agosto de 2024</strong>. Se aplica de forma gradual hasta 2027.</p>
-<h4>Clasificación de riesgos</h4>
-<table class="t">
-<tr><th>Nivel</th><th>Descripción</th><th>Ejemplos</th></tr>
-<tr><td><strong>Inaceptable</strong></td><td>Prohibido. Viola derechos fundamentales.</td><td>Reconocimiento facial en tiempo real en espacios públicos (salvo excepciones), puntuación social por el gobierno, manipulación subliminal</td></tr>
-<tr><td><strong>Alto riesgo</strong></td><td>Permitido con obligaciones estrictas: registro, transparencia, supervisión humana.</td><td>IA en contratación, acceso a educación, servicios esenciales, infraestructuras críticas, justicia penal</td></tr>
-<tr><td><strong>Limitado</strong></td><td>Obligaciones de transparencia: el usuario debe saber que interactúa con IA.</td><td>Chatbots, deepfakes, contenido generado por IA</td></tr>
-<tr><td><strong>Mínimo</strong></td><td>Sin regulación específica.</td><td>Filtros de spam, videojuegos con IA, recomendadores</td></tr>
-</table>
-<div class="warn"><div class="warn-label">Fechas clave</div>Prohibiciones (riesgo inaceptable): aplicables desde <strong>febrero 2025</strong>. Sistemas de IA de propósito general (como GPT): obligaciones desde <strong>agosto 2025</strong>. Sistemas de alto riesgo: <strong>agosto 2026</strong> en adelante.</div>
+
+<h4>Plazos de aplicación por fases</h4>
+<p>La aplicación no fue inmediata, sino escalonada en varios hitos:</p>
+<ul>
+<li><strong>Agosto 2024:</strong> entrada en vigor formal. Solo aplican disposiciones generales y definiciones.</li>
+<li><strong>Febrero 2025:</strong> empiezan a aplicarse las <strong>prohibiciones</strong> sobre sistemas de riesgo inaceptable.</li>
+<li><strong>Agosto 2025:</strong> obligaciones para <strong>modelos de IA de propósito general</strong> (GPT, Claude, Gemini).</li>
+<li><strong>Agosto 2026:</strong> obligaciones para <strong>sistemas de alto riesgo</strong> del Anexo III.</li>
+<li><strong>Agosto 2027:</strong> obligaciones para el resto de sistemas de alto riesgo.</li>
+</ul>
+
+<h4>Sistemas prohibidos (riesgo inaceptable)</h4>
+<p>Totalmente prohibidos por vulnerar derechos fundamentales:</p>
+<ul>
+<li><strong>Puntuación social</strong> por gobiernos: clasificar personas según su comportamiento para negarles derechos (ej: crédito social).</li>
+<li><strong>Reconocimiento facial en tiempo real</strong> en espacios públicos por fuerzas de seguridad, salvo excepciones tasadas (víctimas de secuestro, amenaza terrorista inminente, delincuentes graves).</li>
+<li><strong>Manipulación subliminal:</strong> sistemas que alteran el comportamiento sin que la persona lo sepa.</li>
+<li><strong>Explotación de vulnerabilidades:</strong> sistemas que se aprovechan de la edad, discapacidad o situación económica de grupos vulnerables.</li>
+<li><strong>Categorización biométrica</strong> por raza, religión u orientación sexual.</li>
+<li><strong>Extracción no selectiva</strong> de imágenes faciales de internet o videovigilancia para crear bases de datos de reconocimiento facial.</li>
+</ul>
+
+<h4>Sistemas de alto riesgo — sectores afectados</h4>
+<ul>
+<li><strong>Biometría:</strong> identificación biométrica remota.</li>
+<li><strong>Infraestructuras críticas:</strong> tráfico, agua, electricidad.</li>
+<li><strong>Educación:</strong> acceso a centros educativos, evaluación de estudiantes.</li>
+<li><strong>Empleo:</strong> contratación, selección, evaluación del rendimiento.</li>
+<li><strong>Servicios esenciales:</strong> prestaciones sociales, seguros, créditos.</li>
+<li><strong>Justicia:</strong> interpretación de hechos o aplicación de la ley.</li>
+<li><strong>Inmigración:</strong> evaluación de solicitudes de asilo o visados.</li>
+</ul>
+
+<h4>Obligaciones para sistemas de alto riesgo</h4>
+<ul>
+<li><strong>Registro en base de datos europea</strong> antes de comercializarse.</li>
+<li><strong>Transparencia:</strong> documentación técnica detallada e instrucciones de uso.</li>
+<li><strong>Supervisión humana:</strong> personas capacitadas que puedan intervenir o detener el sistema.</li>
+<li><strong>Gestión de riesgos:</strong> identificar, evaluar y mitigar riesgos durante todo el ciclo de vida.</li>
+<li><strong>Robustez y precisión:</strong> el sistema debe ser resistente a errores y ataques.</li>
+</ul>
+
+<h4>Sanciones</h4>
+<p>Las multas pueden alcanzar hasta <strong>35 millones de euros</strong> o el <strong>7% del volumen de negocio global</strong> para infracciones relacionadas con sistemas prohibidos.</p>
+
+<div class="tip"><div class="tip-label">Lo que más probablemente preguntarían en el examen</div><strong>1.</strong> Entrada en vigor: <strong>2 de agosto de 2024</strong>. <strong>2.</strong> 4 niveles de riesgo: <strong>inaceptable</strong> (prohibido), <strong>alto riesgo</strong> (obligaciones estrictas), <strong>limitado</strong> (transparencia), <strong>mínimo</strong> (sin regulación). <strong>3.</strong> Prohibiciones aplicables desde <strong>febrero 2025</strong>; alto riesgo desde <strong>agosto 2026</strong>. <strong>4.</strong> Sanción máxima: <strong>35 M€ o 7%</strong> de facturación global.</div>
 </div>
 </div>
 
@@ -447,13 +641,40 @@ table.t tr:hover td{background:rgba(255,255,255,.02)}
 </div>
 <div class="acc-body">
 <p>La <strong>Directiva NIS2</strong> (Network and Information Security 2, Directiva UE 2022/2555) es la evolución de la anterior directiva NIS (2016) y establece medidas para garantizar un nivel común de ciberseguridad en la UE. Los estados miembros debían transponerla antes del <strong>18 de octubre de 2024</strong>.</p>
-<h4>Diferencias principales con NIS1</h4>
+
+<h4>Transposición en España</h4>
+<p>España transpone la NIS2 mediante la <strong>Ley de Ciberseguridad</strong> (actualmente en tramitación), que además crea el <strong>Centro Nacional de Ciberseguridad</strong> como autoridad coordinadora única.</p>
+
+<h4>Entidades esenciales vs importantes</h4>
+<table class="t">
+<tr><th></th><th>Entidades esenciales</th><th>Entidades importantes</th></tr>
+<tr><td><strong>Tipo de empresa</strong></td><td>Grandes empresas en sectores críticos</td><td>Medianas empresas en sectores relevantes</td></tr>
+<tr><td><strong>Supervisión</strong></td><td><em>Ex ante</em> (inspecciones programadas)</td><td><em>Ex post</em> (se actúa tras incidente)</td></tr>
+<tr><td><strong>Sanción máxima</strong></td><td><strong>10 M€ o 2%</strong> facturación global</td><td><strong>7 M€ o 1,4%</strong> facturación global</td></tr>
+</table>
+
+<h4>Sectores afectados</h4>
+<p>NIS2 amplía notablemente los sectores respecto a NIS1:</p>
+<ul>
+<li><strong>Ya cubiertos:</strong> energía, transporte, banca, infraestructuras financieras, salud, agua potable, infraestructuras digitales.</li>
+<li><strong>Añadidos por NIS2:</strong> administración pública, aguas residuales, espacio, fabricación crítica, servicios postales, gestión de residuos, alimentación, productos químicos.</li>
+</ul>
+
+<h4>Obligaciones principales</h4>
+<ul>
+<li><strong>Notificación de incidentes:</strong> alerta temprana en <strong>24 horas</strong>, informe detallado en <strong>72 horas</strong>, informe final en <strong>1 mes</strong>.</li>
+<li><strong>Gestión de riesgos:</strong> medidas técnicas y organizativas proporcionadas al riesgo.</li>
+<li><strong>Responsabilidad de la dirección:</strong> los órganos de dirección aprueban las medidas, supervisan su cumplimiento y pueden ser <strong>responsables personalmente</strong>.</li>
+<li><strong>Seguridad en la cadena de suministro:</strong> evaluar riesgos de proveedores.</li>
+</ul>
+
+<h4>Diferencias clave con NIS1</h4>
 <table class="t">
 <tr><th></th><th>NIS 1 (2016)</th><th>NIS 2 (2022)</th></tr>
-<tr><td><strong>Ámbito</strong></td><td>Sectores esenciales (energía, transporte, banca…)</td><td>Ampliado: añade administraciones públicas, sanidad, gestión de residuos, espacio, fabricación crítica</td></tr>
-<tr><td><strong>Sanciones</strong></td><td>Variables por país</td><td>Hasta <strong>10 M€ o 2% facturación global</strong> (entidades importantes) / hasta <strong>7 M€ o 1,4%</strong></td></tr>
-<tr><td><strong>Responsabilidad</strong></td><td>No específica</td><td>Los órganos de dirección pueden ser responsables personalmente</td></tr>
-<tr><td><strong>Notificación incidentes</strong></td><td>Sin plazo armonizado</td><td><strong>24h</strong> alerta temprana / <strong>72h</strong> notificación completa</td></tr>
+<tr><td><strong>Ámbito</strong></td><td>Sectores esenciales limitados</td><td>Muchos más sectores + AAPP</td></tr>
+<tr><td><strong>Sanciones</strong></td><td>Variables por país</td><td>Hasta <strong>10 M€ o 2%</strong> (esenciales) / <strong>7 M€ o 1,4%</strong> (importantes)</td></tr>
+<tr><td><strong>Responsabilidad directivos</strong></td><td>No específica</td><td>Responsabilidad personal explícita</td></tr>
+<tr><td><strong>Notificación</strong></td><td>Sin plazo armonizado</td><td><strong>24h</strong> alerta / <strong>72h</strong> informe completo</td></tr>
 </table>
 </div>
 </div>
@@ -479,6 +700,7 @@ table.t tr:hover td{background:rgba(255,255,255,.02)}
 <li><strong>Mínimo privilegio:</strong> dar solo el acceso estrictamente necesario.</li>
 <li><strong>Asumir la brecha:</strong> diseñar pensando en que el sistema ya ha sido comprometido.</li>
 </ul>
+<div class="tip"><div class="tip-label">Niveles de madurez Zero Trust (CISA)</div>La agencia de ciberseguridad de EE.UU. (CISA) define tres fases: <strong>Tradicional</strong> (acceso basado en perímetro), <strong>Avanzado</strong> (autenticación multifactor y controles dinámicos) y <strong>Óptimo</strong> (arquitectura Zero Trust plena con verificación continua y microsegmentación). La mayoría de las organizaciones se encuentran entre Tradicional y Avanzado.</div>
 </div>
 </div>
 
